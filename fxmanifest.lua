@@ -3,9 +3,9 @@ use_experimental_fxv2_oal 'yes'
 lua54 'yes'
 game 'gta5'
 name 'ox_inventory'
-author 'Overextended'
+author 'CommunityOx'
 version '2.44.2'
-repository 'https://github.com/overextended/ox_inventory'
+repository 'https://github.com/CommunityOx/ox_inventory'
 description 'Slot-based inventory with item metadata support'
 
 dependencies {

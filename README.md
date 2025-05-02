@@ -19,7 +19,7 @@ https://github.com/overextended/ox_inventory/releases/latest/download/ox_invento
 
 We do not guarantee compatibility or support for third-party resources.
 
-- [ox_core](https://github.com/overextended/ox_core)
+- [ox_core](https://github.com/CommunityOx/ox_core)
 - [esx](https://github.com/esx-framework/esx_core)
 - [qbox](https://github.com/Qbox-project/qbx_core)
 - [nd_core](https://github.com/ND-Framework/ND_Core)
@@ -56,7 +56,7 @@ We do not guarantee compatibility or support for third-party resources.
 
 ## Copyright
 
-Copyright © 2024 Overextended <https://github.com/overextended>
+Copyright © 2025 CommunityOx <https://github.com/CommunityOx>
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
