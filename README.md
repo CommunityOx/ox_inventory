@@ -9,7 +9,7 @@ A complete inventory system for FiveM, implementing items, weapons, shops, and m
 
 ## 📚 Documentation
 
-https://overextended.dev/ox_inventory
+https://coxdocs.dev/ox_inventory
 
 ## 💾 Download
 
