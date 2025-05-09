@@ -22,6 +22,7 @@ We do not guarantee compatibility or support for third-party resources.
 - [ox_core](https://github.com/communityox/ox_core)
 - [esx](https://github.com/esx-framework/esx_core)
 - [qbox](https://github.com/Qbox-project/qbx_core)
+- [qb-core](https://github.com/qbcore-framework/qb-core)
 - [nd_core](https://github.com/ND-Framework/ND_Core)
 
 ## ✨ Features
