@@ -4,7 +4,7 @@ lua54 'yes'
 game 'gta5'
 name 'ox_inventory'
 author 'Overextended'
-version '2.44.3'
+version '2.44.4'
 repository 'https://github.com/The-Order-Of-The-Sacred-Framework/ox_inventory'
 description 'Slot-based inventory with item metadata support'
 
@@ -25,14 +25,16 @@ ox_libs {
 
 server_scripts {
     '@oxmysql/lib/MySQL.lua',
+    "modules/config/config_server.lua",
     'init.lua'
 }
 
-client_script 'init.lua'
+client_script { "modules/config/config_client.lua", 'init.lua' }
 
 ui_page 'web/build/index.html'
 
 files {
+    "modules/config/config_client.lua",
     'client.lua',
     'server.lua',
     'locales/*.json',
