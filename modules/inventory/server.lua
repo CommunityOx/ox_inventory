@@ -925,7 +925,7 @@ function Inventory.SetItem(inv, item, count, metadata)
 	if type(item) ~= 'table' then item = Items(item) end
 
 	if not item then return false, 'invalid_item' end
-	if not count then return false, 'invalid_count' end
+	if type(count) ~= 'number' then return false, 'invalid_count' end
 
 	count = math.floor(count + 0.5)
 	if count < 0 then return false, 'negative_count' end
@@ -967,10 +967,10 @@ exports('GetCurrentWeapon', Inventory.GetCurrentWeapon)
 ---@param slotId number
 ---@return table? item
 function Inventory.GetSlot(inv, slotId)
-	if type(slotId) ~= 'number' then return end
+	if not inv or type(slotId) ~= 'number' then return end
 
 	inv = Inventory(inv) --[[@as OxInventory]]
-	local slot = inv and inv.items[slotId]
+	local slot = inv and inv.items?[slotId]
 
 	if slot and not Items.UpdateDurability(inv, slot, Items(slot.name), nil, os.time()) then
         return slot
@@ -982,10 +982,10 @@ exports('GetSlot', Inventory.GetSlot)
 ---@param slotId number
 ---@param durability number
 function Inventory.SetDurability(inv, slotId, durability)
-	if type(slotId) ~= 'number' or type(durability) ~= 'number' then return end
+	if not inv or type(slotId) ~= 'number' or type(durability) ~= 'number' then return end
 
 	inv = Inventory(inv) --[[@as OxInventory]]
-	local slot = inv and inv.items[slotId]
+	local slot = inv and inv.items?[slotId]
 
 	if not slot then return end
 
@@ -1003,10 +1003,10 @@ local Utils = require 'modules.utils.server'
 ---@param slotId number
 ---@param metadata { [string]: any }
 function Inventory.SetMetadata(inv, slotId, metadata)
-	if type(slotId) ~= 'number' then return end
+	if not inv or type(slotId) ~= 'number' then return end
 
 	inv = Inventory(inv) --[[@as OxInventory]]
-	local slot = inv and inv.items[slotId]
+	local slot = inv and inv.items?[slotId]
 
 	if not slot then return end
 
@@ -1106,7 +1106,7 @@ function Inventory.AddItem(inv, item, count, metadata, slot, cb)
 	if type(item) ~= 'table' then item = Items(item) end
 
 	if not item then return false, 'invalid_item' end
-	if not count then return false, 'invalid_count' end
+	if type(count) ~= 'number' then return false, 'invalid_count' end
 
 	count = math.floor(count + 0.5)
 	if count <= 0 then return false, 'negative_count' end
@@ -1316,7 +1316,7 @@ function Inventory.RemoveItem(inv, item, count, metadata, slot, ignoreTotal, str
 	if type(item) ~= 'table' then item = Items(item) end
 
 	if not item then return false, 'invalid_item' end
-	if not count then return false, 'invalid_count' end
+	if type(count) ~= 'number' then return false, 'invalid_count' end
 
 	count = math.floor(count + 0.5)
 	if count <= 0 then return false, 'negative_count' end
@@ -2431,7 +2431,7 @@ local function giveItem(playerId, slot, target, count)
 
 	if not fromInventory or not toInventory then return end
 
-	if not count or count <= 0 then count = 1 end
+	if type(count) ~= 'number' or count <= 0 then count = 1 end
 
 	if toInventory.player then
 		local data = fromInventory.items[slot]
