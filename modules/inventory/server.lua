@@ -991,6 +991,69 @@ local Utils = require 'modules.utils.server'
 
 ---@param inv inventory
 ---@param slotId number
+---@return table|nil metadata
+function Inventory.GetMetadataWithSlot(inv, slotId)
+    inv = Inventory(inv) --[[@as OxInventory]]
+    local slot = inv and inv.items[slotId]
+
+    if not slot then return end
+
+    return table.clone(slot.metadata)
+end
+exports('GetMetadata', Inventory.GetMetadata)
+
+---@param inv inventory
+---@param itemName string
+---@return table|nil metadata
+function Inventory.GetMetadataWithItem(inv, itemName)
+    inv = Inventory(inv) --[[@as OxInventory]]
+    
+    if not inv then return end
+    
+    for _, slotData in pairs(inv.items) do
+        if slotData and slotData.name == itemName then
+            if not Items.UpdateDurability(inv, slotData, Items(itemName), nil, os.time()) then
+                return table.clone(slotData.metadata)
+            end
+        end
+    end
+end
+exports('GetMetadataWithItem', Inventory.GetMetadataWithItem)
+
+---@param inv inventory
+---@param itemNames string|string[]
+---@return table[]|nil metadata Array of metadata tables with item names included
+function Inventory.GetMetadataWithItems(inv, itemNames)
+    inv = Inventory(inv) --[[@as OxInventory]]
+    
+    if not inv then return end
+    
+    local itemsToFind = type(itemNames) == 'string' and {itemNames} or itemNames
+    local results = {}
+    local n = 0
+    
+    for _, slotData in pairs(inv.items) do
+        if slotData then
+            for _, itemName in ipairs(itemsToFind) do
+                if slotData.name == itemName then
+                    if not Items.UpdateDurability(inv, slotData, Items(itemName), nil, os.time()) then
+                        n += 1
+                        local metadata = table.clone(slotData.metadata)
+                        metadata.name = slotData.name
+                        results[n] = metadata
+                    end
+                    break
+                end
+            end
+        end
+    end
+    
+    return n > 0 and results or nil
+end
+exports('GetMetadataWithItems', Inventory.GetMetadataWithItems)
+
+---@param inv inventory
+---@param slotId number
 ---@param metadata { [string]: any }
 function Inventory.SetMetadata(inv, slotId, metadata)
 	inv = Inventory(inv) --[[@as OxInventory]]
