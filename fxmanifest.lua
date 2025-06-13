@@ -28,11 +28,12 @@ server_scripts {
     'init.lua'
 }
 
-client_script 'init.lua'
+client_script { "modules/config/config_client.lua", 'init.lua' }
 
 ui_page 'web/build/index.html'
 
 files {
+    "modules/config/config_client.lua",
     'client.lua',
     'server.lua',
     'locales/*.json',
