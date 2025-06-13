@@ -12,17 +12,11 @@ dependencies {
     '/server:6116',
     '/onesync',
     'oxmysql',
-    'ox_lib',
+    'qb-core
 }
 
 shared_script { '@ox_lib/init.lua', "modules/config/config_shared.lua" }
 
-
-ox_libs {
-    'locale',
-    'table',
-    'math',
-}
 
 server_scripts {
     '@oxmysql/lib/MySQL.lua',
