@@ -4,8 +4,8 @@ lua54 'yes'
 game 'gta5'
 name 'ox_inventory'
 author 'Overextended'
-version '2.44.3'
-repository 'https://github.com/communityox/ox_inventory'
+version '2.45.10'
+repository 'https://github.com/JericoFX/ox_inventory'
 description 'Slot-based inventory with item metadata support'
 
 dependencies {
@@ -15,7 +15,8 @@ dependencies {
     'ox_lib',
 }
 
-shared_script '@ox_lib/init.lua'
+shared_script { '@ox_lib/init.lua', "modules/config/config_shared.lua" }
+
 
 ox_libs {
     'locale',
@@ -25,6 +26,7 @@ ox_libs {
 
 server_scripts {
     '@oxmysql/lib/MySQL.lua',
+    "modules/config/config_server.lua",
     'init.lua'
 }
 
@@ -33,7 +35,7 @@ client_script { "modules/config/config_client.lua", 'init.lua' }
 ui_page 'web/build/index.html'
 
 files {
-    "modules/config/config_client.lua",
+
     'client.lua',
     'server.lua',
     'locales/*.json',
@@ -43,6 +45,7 @@ files {
     'web/images/*.png',
     'modules/**/shared.lua',
     'modules/**/client.lua',
+    'modules/**/**/client.lua',
     'modules/bridge/**/client.lua',
     'data/*.lua',
 }
