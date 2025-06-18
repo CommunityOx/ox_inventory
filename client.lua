@@ -54,11 +54,11 @@ local function canOpenInventory()
         return shared.info('cannot open inventory', '(is busy)')
     end
 
-    if PlayerData.dead or IsPedFatallyInjured(playerPed) then
+    if PlayerData.dead or PlayerData.isdead or IsPedFatallyInjured(playerPed) then
         return shared.info('cannot open inventory', '(fatal injury)')
     end
 
-    if PlayerData.cuffed or IsPedCuffed(playerPed) then
+    if PlayerData.cuffed or PlayerData.ishandcuffed or IsPedCuffed(playerPed) then
         return shared.info('cannot open inventory', '(cuffed)')
     end
 
