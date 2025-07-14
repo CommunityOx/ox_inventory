@@ -1,28 +1,33 @@
-$mainColor: #22232c;
-$textColor: #c1c2c5;
-$mainFont: Roboto;
+@use "sass:color";
 
-$secondaryColor: rgba(12, 12, 12, 0.4);
-$secondaryColorHighlight: #33343F;
-$secondaryColorLight: rgba(0, 0, 0, 0.5);
-$secondaryColorDark: rgba(12, 12, 12, 0.8);
+$mainColor: #111111;          // Dark Black (main backgrounds)
+$secondaryColor: #1e1e1e;     // Dark Grey (secondary backgrounds)
+$tertiaryColor: #212529;      // Desaturated Teal (hover states, borders)
+$quaternaryColor: #343a40;    // Very Light Grey (input backgrounds)
+$textColor: #c7d0d6;          // White text
+$accentBlue: #0d6efd;         // Blue (primary actions)
+$accentOrange: #fd7e14;       // Orange (secondary actions)
+$mainFont: 'Inter', 'Segoe UI', Roboto, sans-serif;
 
+$borderRadius: 8px;
+$borderRadiusSmall: 4px;
+$borderRadiusLarge: 12px;
 $gridCols: 5;
 $gridRows: 5;
-$gridSize: 10.2vh;
-$gridGap: 2px;
+$gridSize: 12.5vh;
+$gridGap: 0.5rem;
 $containerSize: calc(#{$gridRows} * #{$gridSize + 0.22vh} + #{$gridRows} * #{$gridGap});
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
-    'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: $mainFont;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100vh;
   background: none !important;
   overflow: hidden !important;
   user-select: none;
+  color: $textColor;
 }
 
 #root {
@@ -30,17 +35,39 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-family: 'JetBrains Mono', 'Fira Code', Monaco, Consolas, 'Courier New', monospace;
 }
 
 ::-webkit-scrollbar {
-  display: none;
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: $mainColor;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $accentOrange;
+  border-radius: 3px;
+  
+  &:hover {
+    background: color.scale($accentOrange, $lightness: 20%);
+  }
+}
+
+::-webkit-scrollbar-corner {
+  background: $mainColor;
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: $accentOrange $mainColor;
 }
 
 p {
   margin: 0;
   padding: 0;
   font-family: $mainFont;
+  font-weight: 400;
 }
 
 input[type='number']::-webkit-inner-spin-button,
@@ -53,26 +80,25 @@ input[type='number']::-webkit-outer-spin-button {
 .app-wrapper {
   height: 100%;
   width: 100%;
-  color: white;
+  color: $textColor;
 }
 
 .context-menu-list {
   min-width: 200px;
-  background-color: $mainColor;
+  background: $secondaryColor;
   color: $textColor;
-  padding: 4px;
-  border-color: rgba(0, 0, 0, 0.2);
-  border-style: inset;
-  border-width: 1px;
-  border-radius: 4px;
+  padding: 8px;
+  border: none;
+  border-radius: $borderRadius;
   outline: none;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
-.context-menu-item  {
-  padding: 8px;
-  border-radius: 4px;
+.context-menu-item {
+  padding: 12px 16px;
+  border-radius: $borderRadiusSmall;
   background-color: transparent;
   outline: none;
   border: none;
@@ -80,17 +106,25 @@ input[type='number']::-webkit-outer-spin-button {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  font-size: 13px;
+  
   &:active {
     transform: none;
   }
+  
   &:hover {
-    background-color: $secondaryColorHighlight;
+    background: $tertiaryColor;
     cursor: pointer;
+    transform: translateY(-1px);
   }
 }
 
 .tooltip-description {
-  padding-top: 5px;
+  padding-top: 8px;
+  font-size: 13px;
+  opacity: 0.8;
 }
 
 .tooltip-markdown > p {
@@ -98,21 +132,27 @@ input[type='number']::-webkit-outer-spin-button {
 }
 
 button:active {
-  transform: translateY(3px);
+  transform: translateY(2px);
 }
 
 .item-drag-preview {
   width: 7.7vh;
   height: 7.7vh;
-  z-index: 1;
+  z-index: 9999;
   position: fixed;
   pointer-events: none;
   top: 0;
   left: 0;
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 7vh;
+  background-size: 6vh;
   image-rendering: -webkit-optimize-contrast;
+  border-radius: $borderRadiusSmall;
+  background-color: $secondaryColor;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  opacity: 0.9;
+  transition: none !important;
+  animation: none !important;
 }
 
 .inventory-wrapper {
@@ -121,7 +161,6 @@ button:active {
   justify-content: center;
   align-items: center;
   height: 100%;
-
   gap: 20px;
 }
 
@@ -131,62 +170,74 @@ button:active {
   .inventory-control-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 12px;
     justify-content: center;
     align-items: center;
   }
 
   .inventory-control-input {
-    transition: 200ms;
-    padding: 16px 8px;
-    border-radius: 2.5%;
+    transition: all 0.2s ease;
+    padding: 12px 16px;
+    border-radius: $borderRadius;
     font-family: $mainFont;
-    font-size: 16px;
+    font-size: 13px;
+    font-weight: 400;
     text-align: center;
     outline: none;
     border: none;
-    color: #fff;
-    background-color: $secondaryColor;
+    color: $textColor;
+    background: $quaternaryColor;
+    
     &:focus-within {
-      background-color: $secondaryColorDark;
+      background: color.scale($quaternaryColor, $lightness: 5%);
+      box-shadow: 0 0 0 2px rgba(14, 77, 170, 0.3);
+    }
+    
+    &::placeholder {
+      color: rgba($textColor, 0.5);
     }
   }
 
   .inventory-control-button {
-    font-size: 14px;
-    color: #fff;
-    background-color: $secondaryColor;
-    transition: 200ms;
-    padding: 12px 8px;
-    border-radius: 2.5%;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    background: #1e1e1e;
+    transition: all 0.2s ease;
+    padding: 12px 20px;
+    border-radius: $borderRadius;
     border: none;
     text-transform: uppercase;
     font-family: $mainFont;
     width: 100%;
-    font-weight: 500;
+    letter-spacing: 0.5px;
+    
     &:hover {
-      background-color: $secondaryColorDark;
+      background: color.scale($accentBlue, $lightness: 8%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(14, 77, 170, 0.4);
     }
   }
 }
 
 .useful-controls-dialog {
-  background-color: $mainColor;
+  background: $secondaryColor;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   color: $textColor;
-  width: 450px;
+  width: 400px;
   display: flex;
   flex-direction: column;
-  padding: 16px;
-  border-radius: 4px;
-  gap: 16px;
+  padding: 12px;
+  border-radius: $borderRadiusSmall;
+  gap: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .useful-controls-dialog-overlay {
-  background-color: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
 }
 
 .useful-controls-dialog-title {
@@ -194,20 +245,24 @@ button:active {
   width: 100%;
   justify-content: space-between;
   align-items: center;
-  font-size: 18px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
 }
 
 .useful-controls-dialog-close {
-  width: 25px;
-  height: 25px;
-  padding: 6px;
+  width: 24px;
+  height: 24px;
+  padding: 4px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 4px;
+  border-radius: $borderRadiusSmall;
   fill: $textColor;
+  transition: background 0.1s ease;
+  
   &:hover {
-    background-color: $secondaryColorHighlight;
+    background: $tertiaryColor;
     cursor: pointer;
   }
 }
@@ -215,32 +270,34 @@ button:active {
 .useful-controls-content-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 12px;
 }
 
 .divider {
   width: 100%;
   height: 1px;
-  background-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.08);
+  margin: 4px 0;
 }
 
 .useful-controls-button {
   position: absolute !important;
-  bottom: 25px;
-  right: 25px;
-  transition: 200ms !important;
+  bottom: 16px;
+  right: 16px;
+  transition: background 0.1s ease !important;
   border: none;
-  color: white;
-  width: 52px;
-  height: 52px;
+  color: $textColor;
+  width: 40px;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
-  fill: white;
-  border-radius: 5% !important;
-  background-color: $secondaryColor !important;
+  fill: $textColor;
+  border-radius: $borderRadiusSmall !important;
+  background: $accentOrange !important;
+  
   &:hover {
-    background-color: $secondaryColorDark !important;
+    background: color.scale($accentOrange, $lightness: 5%) !important;
     cursor: pointer;
   }
 }
@@ -249,25 +306,37 @@ button:active {
   position: absolute !important;
   right: 8px;
   top: 8px;
-  border-radius: 2.5% !important;
-  color: grey !important;
+  border-radius: $borderRadiusSmall !important;
+  color: rgba($textColor, 0.6) !important;
+  padding: 4px;
+  
+  &:hover {
+    color: $textColor !important;
+    background: $tertiaryColor !important;
+  }
 }
 
-// Dialog is used fro useful controls window
-
-
-// inventory grids
 .inventory-grid-wrapper {
   display: flex;
   flex-direction: column;
-  gap: calc($gridGap * 2);
+  gap: 8px;
+  background: $mainColor;
+  border-radius: $borderRadius;
+  padding: 16px;
+  border: none;
 }
+
 .inventory-grid-header-wrapper {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  
   p {
-    font-size: 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: $textColor;
   }
 }
 
@@ -277,33 +346,30 @@ button:active {
   grid-template-columns: repeat($gridCols, $gridSize);
   grid-auto-rows: $gridSize + 0.22vh;
   gap: $gridGap;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
-// inventory slots
 .inventory-slot {
   background-color: $secondaryColor;
   background-repeat: no-repeat;
   background-position: center;
-  border-radius: 2.5%;
-  image-rendering: -webkit-optimize-contrast;
-  position: relative;
   background-size: 7vh;
-  color: $textColor;
-  border-color: rgba(0, 0, 0, 0.2);
-  border-style: inset;
-  border-width: 1px;
+  transition: background-color 0.15s ease, background-size 0.15s ease;
+
+  &:hover {
+    background-color: color.scale($secondaryColor, $lightness: 3%);
+    background-size: 8.5vh;
+  }
 }
 
 .inventory-slot-label-box {
-  background-color: $mainColor;
+  background: $mainColor;
   color: $textColor;
   text-align: center;
-  border-bottom-left-radius: 0.25vh;
-  border-bottom-right-radius: 0.25vh;
-  border-top-color: rgba(0, 0, 0, 0.2);
-  border-top-style: inset;
-  border-top-width: 1px;
+  border-bottom-left-radius: $borderRadiusSmall;
+  border-bottom-right-radius: $borderRadiusSmall;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
 }
 
 .inventory-slot-label-text {
@@ -311,21 +377,24 @@ button:active {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding: 2px 3px;
-  font-weight: 400;
+  padding: 4px 6px;
+  font-weight: 500;
   font-family: $mainFont;
-  font-size: 12px;
+  font-size: 11px;
+  letter-spacing: 0.3px;
 }
 
 .inventory-slot-number {
-  background-color: white;
-  color: black;
-  height: 12px;
-  border-top-left-radius: 0.25vh;
-  border-bottom-right-radius: 0.25vh;
-  padding: 3px;
-  font-size: 12px;
+  background: $accentOrange;
+  color: white;
+  height: 14px;
+  border-top-left-radius: $borderRadiusSmall;
+  border-bottom-right-radius: $borderRadiusSmall;
+  padding: 3px 6px;
+  font-size: 11px;
   font-family: $mainFont;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .item-slot-wrapper {
@@ -333,8 +402,10 @@ button:active {
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
+  
   p {
     font-size: 12px;
+    font-weight: 500;
   }
 }
 
@@ -353,10 +424,12 @@ button:active {
   display: flex;
   flex-direction: row;
   align-self: flex-end;
-  padding: 3px;
-  gap: 3px;
+  padding: 4px;
+  gap: 4px;
+  
   p {
-    font-size: 12px;
+    font-size: 11px;
+    font-weight: 600;
   }
 }
 
@@ -365,10 +438,13 @@ button:active {
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
-  padding-right: 3px;
+  padding-right: 4px;
+  
   p {
-    font-size: 14px;
-    text-shadow: 0.1vh 0.1vh 0 rgba(0, 0, 0, 0.7);
+    font-size: 13px;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+    color: #4ade80;
   }
 }
 
@@ -376,31 +452,33 @@ button:active {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  padding-right: 3px;
+  padding-right: 4px;
+  
   p {
-    font-size: 14px;
-    text-shadow: 0.1vh 0.1vh 0 rgba(0, 0, 0, 0.7);
+    font-size: 13px;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+    color: $accentOrange;
   }
 }
-
 
 .tooltip-wrapper {
   pointer-events: none;
   display: flex;
-  background-color: $mainColor;
-  width: 200px;
+  background: $secondaryColor;
+  width: 180px;
   padding: 8px;
   flex-direction: column;
-  min-width: 200px;
+  min-width: 160px;
   color: $textColor;
   font-family: $mainFont;
-  border-radius: 4px;
-  border-color: rgba(0, 0, 0, 0.2);
-  border-style: inset;
-  border-width: 1px;
+  border-radius: $borderRadiusSmall;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  
   p {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 400;
+    line-height: 1.3;
   }
 }
 
@@ -409,9 +487,11 @@ button:active {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 4px;
+  
   p {
-    font-size: 15px;
-    font-weight: 400;
+    font-size: 12px;
+    font-weight: 500;
   }
 }
 
@@ -420,30 +500,37 @@ button:active {
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  margin: 4px 0;
+  
   svg {
-    padding-right: 3px;
+    padding-right: 4px;
+    fill: $accentBlue;
   }
+  
   p {
-    font-size: 14px;
+    font-size: 11px;
+    font-weight: 400;
   }
 }
 
 .tooltip-ingredients {
-  padding-top: 5px;
-}
-
-.tooltip-ingredient {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  img {
-    width: 28px;
-    height: 28px;
-    padding-right: 5px;
+  padding-top: 4px;
+  
+  .tooltip-ingredient {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 2px 0;
+    
+    img {
+      width: 20px;
+      height: 20px;
+      padding-right: 6px;
+      border-radius: 1px;
+    }
   }
 }
 
-// hotbar
 .hotbar-container {
   display: flex;
   align-items: center;
@@ -466,34 +553,35 @@ button:active {
   justify-content: space-between;
 }
 
-// item notifications
-
 .item-notification-container {
   display: flex;
-  overflow-x: scroll;
+  overflow-x: auto;
   flex-wrap: nowrap;
-  gap: 2px;
+  gap: 4px;
   position: absolute;
   bottom: 20vh;
   left: 50%;
   width: 100%;
   margin-left: calc(50% - calc($gridSize/2));
   transform: translate(-50%);
+  padding: 0 20px;
 }
 
 .item-notification-action-box {
   width: 100%;
   color: $textColor;
-  background-color: $secondaryColor;
+  background: $tertiaryColor;
   text-transform: uppercase;
   text-align: center;
-  border-top-left-radius: 0.25vh;
-  border-top-right-radius: 0.25vh;
+  border-top-left-radius: $borderRadiusSmall;
+  border-top-right-radius: $borderRadiusSmall;
   font-family: $mainFont;
+  
   p {
-    font-size: 11px;
-    padding: 2px;
+    font-size: 10px;
+    padding: 4px;
     font-weight: 600;
+    letter-spacing: 0.5px;
   }
 }
 
@@ -504,17 +592,30 @@ button:active {
 }
 
 .durability-bar {
-  background: rgba(0, 0, 0, 0.5);
-  height: 3px;
+  background: rgba(0, 0, 0, 0.6);
+  height: 4px;
   overflow: hidden;
+  border-radius: 2px;
+  
+  .durability-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ef4444, #f59e0b, #10b981);
+    transition: width 0.3s ease;
+  }
 }
 
 .weight-bar {
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px inset rgba(0, 0, 0, 0.1);
-  height: 0.8vh;
-  border-radius: 5%;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  height: 6px;
+  border-radius: 3px;
   overflow: hidden;
+  
+  .weight-fill {
+    height: 100%;
+    background: linear-gradient(90deg, $accentBlue, $accentOrange);
+    transition: width 0.3s ease;
+  }
 }
 
 .transition-fade-enter {
@@ -523,7 +624,7 @@ button:active {
 
 .transition-fade-enter-active {
   opacity: 1;
-  transition: opacity 200ms;
+  transition: opacity 0.2s ease;
 }
 
 .transition-fade-exit {
@@ -532,23 +633,27 @@ button:active {
 
 .transition-fade-exit-active {
   opacity: 0;
-  transition: opacity 200ms;
+  transition: opacity 0.2s ease;
 }
 
 .transition-slide-up-enter {
-  transform: translateY(200px)
+  transform: translateY(20px);
+  opacity: 0;
 }
 
 .transition-slide-up-enter-active {
-  transform: translateY(0px);
-  transition: all 200ms;
+  transform: translateY(0);
+  opacity: 1;
+  transition: all 0.2s ease;
 }
 
 .transition-slide-up-exit {
-  transform: translateY(0px);
+  transform: translateY(0);
+  opacity: 1;
 }
 
 .transition-slide-up-exit-active {
-  transform: translateY(200px);
-  transition: all 200ms;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.2s ease;
 }

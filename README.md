@@ -2,6 +2,13 @@
 
 A complete inventory system for FiveM, implementing items, weapons, shops, and more without any strict framework dependency.
 
+## ALL CREDITS GO TO COMMUNITYOX AND THE OX TEAM - THIS IS NOT MY INVENTORY
+I would like to make this very clear. This is not my inventory, this is simply a reskin of ox_inventory, 
+Overextended is the original copyright holder. Please contact them for any issues.
+This is a reskin of ox_inventory in a JG-Esque style. I'm still learning frontend, so I thought this would be cool to learn! Please give any suggestions and I'll try my best <3
+
+
+
 ![](https://img.shields.io/github/downloads/communityox/ox_inventory/total?logo=github)
 ![](https://img.shields.io/github/downloads/communityox/ox_inventory/latest/total?logo=github)
 ![](https://img.shields.io/github/contributors/communityox/ox_inventory?logo=github)
