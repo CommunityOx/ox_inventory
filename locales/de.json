@@ -63,6 +63,7 @@
   "stash_lowgrade": "Du bist nicht autorisiert diesen Gegenstand zu nehmen",
   "cannot_use": "Du kannst %s nicht benutzen",
   "shop_nostock": "Der Gegenstand ist ausverkauft",
+  "shop_wrongidentifier": "Dieser Gegenstand ist nicht für dich bestimmt.",
   "identification": "Geschlecht: %s  \nGeburtstag: %s",
   "search_dumpster": "Durchsuche Mülleimer",
   "open_label": "Öffne %s",

@@ -33,7 +33,8 @@ local function setupShopItems(id, shopType, shopName, groups)
 				metadata = slot.metadata,
 				license = slot.license,
 				currency = slot.currency,
-				grade = slot.grade
+				grade = slot.grade,
+                identifiers = slot.identifiers,
 			}
 
 			if slot.metadata then
@@ -180,6 +181,20 @@ local function isRequiredGrade(grade, rank)
 	end
 end
 
+local isRequiredIdentifier = function(identifier, identifiers)
+	if type(identifiers) == "table" then
+		for i=1, #identifiers do
+			if identifiers[i] == identifier then
+				return true
+			end
+		end
+		return false
+	else
+		return identifier == identifiers
+	end
+end
+
+
 lib.callback.register('ox_inventory:buyItem', function(source, data)
 	if data.toType == 'player' then
 		if data.count == nil then data.count = 1 end
@@ -215,6 +230,13 @@ lib.callback.register('ox_inventory:buyItem', function(source, data)
 				local _, rank = server.hasGroup(playerInv, shop.groups)
 				if not isRequiredGrade(fromData.grade, rank) then
 					return false, false, { type = 'error', description = locale('stash_lowgrade') }
+				end
+			end
+
+            if fromData.identifiers then
+				local _, identifier = server.hasIdentifier(playerInv, fromData.identifiers)
+				if not isRequiredIdentifier(identifier, fromData.identifiers) then
+					return false, false, { type = 'error', description = locale('shop_wrongidentifier') }
 				end
 			end
 
@@ -255,6 +277,7 @@ lib.callback.register('ox_inventory:buyItem', function(source, data)
 					price = fromData.price,
 					totalPrice = price,
 					currency = currency,
+                    identifiers = fromData.identifiers
 				}) then return false end
 
 				Inventory.SetSlot(playerInv, fromItem, count, metadata, data.toSlot)

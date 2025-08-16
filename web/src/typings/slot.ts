@@ -20,4 +20,5 @@ export type SlotWithItem = Slot & {
   duration?: number;
   image?: string;
   grade?: number | number[];
+  identifiers?: string | string[];
 };

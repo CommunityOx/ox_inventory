@@ -15,4 +15,5 @@ export type Inventory = {
   maxWeight?: number;
   label?: string;
   groups?: Record<string, number>;
+  identifier?: string | string[];
 };
