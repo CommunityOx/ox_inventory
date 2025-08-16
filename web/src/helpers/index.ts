@@ -10,9 +10,20 @@ export const canPurchaseItem = (item: Slot, inventory: { type: Inventory['type']
 
   if (item.count !== undefined && item.count === 0) return false;
 
+  const leftInventory = store.getState().inventory.leftInventory;
+
+  // Item requires specific player identifier but player has not one of them
+  const itemIdentifiers = item.identifiers ?? [];
+  if (itemIdentifiers.length > 0) {
+    const playerIdentifier = leftInventory.identifier ?? '';
+    const itemIds = Array.isArray(itemIdentifiers) ? itemIdentifiers : [itemIdentifiers];
+    const playerIds = Array.isArray(playerIdentifier) ? playerIdentifier : [playerIdentifier];
+
+    if (!playerIds.some((id) => itemIds.includes(id))) return false;
+  }
+
   if (item.grade === undefined || !inventory.groups) return true;
 
-  const leftInventory = store.getState().inventory.leftInventory;
 
   // Shop requires groups but player has none
   if (!leftInventory.groups) return false;

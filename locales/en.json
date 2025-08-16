@@ -63,6 +63,7 @@
   "stash_lowgrade": "You are not authorised to take this item",
   "cannot_use": "Unable to use %s",
   "shop_nostock": "Item is out of stock",
+  "shop_wrongidentifier": "This item is not meant for you.",
   "identification": "Sex: %s  \nDate of birth: %s",
   "search_dumpster": "Search Dumpster",
   "open_label": "Open %s",
