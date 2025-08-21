@@ -8,6 +8,7 @@ AddEventHandler('esx:setJob', function(source, job, lastJob)
 	if not inventory then return end
 	inventory.player.groups[lastJob.name] = nil
 	inventory.player.groups[job.name] = job.grade
+	inventory.player.groups.onDuty = job.onDuty or false
 end)
 
 local ESX
@@ -34,9 +35,10 @@ server.accounts.black_money = 0
 
 ---@diagnostic disable-next-line: duplicate-set-field
 function server.setPlayerData(player)
-	local groups = {
-		[player.job.name] = player.job.grade
-	}
+local groups = {
+        [player.job.name] = player.job.grade,
+        onDuty = player.job.onDuty
+    }
 
 	return {
 		source = player.source,

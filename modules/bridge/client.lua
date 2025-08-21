@@ -9,6 +9,8 @@ end
 function client.hasGroup(group)
 	if not PlayerData.loaded then return end
 
+	if PlayerData.groups.onDuty ~= nil and not PlayerData.groups.onDuty then return end
+
 	if type(group) == 'table' then
 		for name, rank in pairs(group) do
 			local groupRank = PlayerData.groups[name]

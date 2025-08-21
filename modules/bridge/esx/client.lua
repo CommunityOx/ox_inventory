@@ -27,7 +27,10 @@ AddEventHandler('esx:setPlayerData', function(key, value)
 
 	if key == 'job' then
 		key = 'groups'
-		value = { [value.name] = value.grade }
+		value = { 
+			[value.name] = value.grade, 
+			onDuty =  value.onDuty
+		}
 	end
 
 	PlayerData[key] = value

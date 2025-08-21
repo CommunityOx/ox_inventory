@@ -2,6 +2,8 @@
 ---starting to get bulky
 
 function server.hasGroup(inv, group)
+	if inv.player.groups.onDuty ~= nil and not inv.player.groups.onDuty then return end
+	
 	if type(group) == 'table' then
 		for name, rank in pairs(group) do
 			local groupRank = inv.player.groups[name]
