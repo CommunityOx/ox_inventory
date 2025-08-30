@@ -269,7 +269,8 @@ local function openInventory(source, invType, data, ignoreSecurityChecks)
 		type = left.type,
 		slots = left.slots,
 		weight = left.weight,
-		maxWeight = left.maxWeight
+		maxWeight = left.maxWeight,
+        identifier = left.identifier
 	}, right and {
 		id = right.id,
 		label = right.player and '' or right.label,
