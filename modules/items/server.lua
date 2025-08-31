@@ -67,6 +67,7 @@ CreateThread(function()
 					item.close = item.closeonuse == nil and true or item.closeonuse
 					item.stack = item.stackable == nil and true or item.stackable
 					item.description = item.description
+					item.rarity = item.rarity
 					item.weight = item.weight or 0
 					dump[i] = item
 					count += 1
@@ -85,7 +86,8 @@ CreateThread(function()
 		weight = %s,
 		stack = %s,
 		close = %s,
-		description = %q
+		description = %q,
+		rarity = %s
 	},
 ]]
 				local fileSize = #file
@@ -94,7 +96,7 @@ CreateThread(function()
 					if not ItemList[item.name] then
 						fileSize += 1
 
-						local itemStr = itemFormat:format(item.name, item.label, item.weight, item.stack, item.close, item.description and json.encode(item.description) or 'nil')
+						local itemStr = itemFormat:format(item.name, item.label, item.weight, item.stack, item.close, item.description and json.encode(item.description) or 'nil', item.rarity)
 						-- temporary solution for nil values
 						itemStr = itemStr:gsub('[%s]-[%w]+ = "?nil"?,?', '')
 						file[fileSize] = itemStr

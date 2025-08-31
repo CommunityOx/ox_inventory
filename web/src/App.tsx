@@ -28,6 +28,7 @@ debugData([
             slot: 1,
             name: 'iron',
             weight: 3000,
+            rarity: 2,
             metadata: {
               description: `name: Svetozar Miletic  \n Gender: Male`,
               ammo: 3,
@@ -44,6 +45,7 @@ debugData([
             name: 'water',
             weight: 100,
             count: 1,
+            rarity: 1,
             metadata: { description: 'Generic item description' },
           },
           { slot: 5, name: 'water', weight: 100, count: 1 },

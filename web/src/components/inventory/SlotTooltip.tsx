@@ -19,7 +19,23 @@ const SlotTooltip: React.ForwardRefRenderFunction<
     return Object.entries(item.ingredients).sort((a, b) => a[1] - b[1]);
   }, [item]);
   const description = item.metadata?.description || itemData?.description;
+  const rarity = item?.rarity || itemData?.rarity;
   const ammoName = itemData?.ammoName && Items[itemData?.ammoName]?.label;
+
+  const rarityData = (() => {
+  switch (rarity) {
+    case 1:
+      return "Uncommon Item";
+    case 2:
+      return "Rare Item";
+    case 3:
+      return "Epic Item";
+    case 4:
+      return "Legendary Item";
+    case 5:
+      return "Ultra Rare Item";
+  }
+  })();
 
   return (
     <>
@@ -48,6 +64,9 @@ const SlotTooltip: React.ForwardRefRenderFunction<
             <div className="tooltip-description">
               <ReactMarkdown className="tooltip-markdown">{description}</ReactMarkdown>
             </div>
+          )}
+          {rarity && (
+            <div className={`tooltip-description textrarity${rarity}`}>{rarityData}</div>
           )}
           {inventoryType !== 'crafting' ? (
             <>

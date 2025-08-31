@@ -160,3 +160,15 @@ export const getItemUrl = (item: string | SlotWithItem) => {
 
   return itemData.image;
 };
+
+export const getItemRarity = (item: string | SlotWithItem) => {
+  const isObj = typeof item === 'object';
+
+  if (isObj) {
+    if (!item.name) return;
+    
+    if (item?.rarity) {
+      return item?.rarity;
+    }
+  }
+};

@@ -6,7 +6,7 @@ import WeightBar from '../utils/WeightBar';
 import { onDrop } from '../../dnd/onDrop';
 import { onBuy } from '../../dnd/onBuy';
 import { Items } from '../../store/items';
-import { canCraftItem, canPurchaseItem, getItemUrl, isSlotWithItem } from '../../helpers';
+import { canCraftItem, canPurchaseItem, getItemUrl, getItemRarity, isSlotWithItem } from '../../helpers';
 import { onUse } from '../../dnd/onUse';
 import { Locale } from '../../store/locale';
 import { onCraft } from '../../dnd/onCraft';
@@ -124,7 +124,21 @@ const InventorySlot: React.ForwardRefRenderFunction<HTMLDivElement, SlotProps> =
       ref={refs}
       onContextMenu={handleContext}
       onClick={handleClick}
-      className="inventory-slot"
+      //className="inventory-slot"
+      className={`inventory-slot ${
+    (() => {
+      const rarityBG = getItemRarity(item as SlotWithItem);
+      if (!rarityBG) return '';
+      const rarityClass: Record<number, string> = {
+        1: 'rarity1',
+        2: 'rarity2',
+        3: 'rarity3',
+        4: 'rarity4',
+        5: 'rarity5',
+      };
+      return rarityClass[rarityBG] || '';
+    })()
+  }`}
       style={{
         filter:
           !canPurchaseItem(item, { type: inventoryType, groups: inventoryGroups }) || !canCraftItem(item, inventoryType)

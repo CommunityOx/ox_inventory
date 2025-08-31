@@ -198,6 +198,7 @@ return {
 		label = 'Bulletproof Vest',
 		weight = 3000,
 		stack = false,
+		rarity = 3,
 		client = {
 			anim = { dict = 'clothingshirt', clip = 'try_shirt_positive_d' },
 			usetime = 3500
@@ -213,6 +214,7 @@ return {
 		label = 'Fleeca Card',
 		stack = false,
 		weight = 10,
+		rarity = 2,
 		client = {
 			image = 'card_bank.png'
 		}
@@ -221,5 +223,6 @@ return {
 	['scrapmetal'] = {
 		label = 'Scrap Metal',
 		weight = 80,
+		rarity = 1,
 	},
 }

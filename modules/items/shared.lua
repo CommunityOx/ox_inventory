@@ -25,6 +25,10 @@ local function newItem(data)
 		data.stack = true
 	end
 
+	if data.rarity == nil then
+		data.rarity = 0
+	end
+
 	local clientData, serverData = data.client, data.server
 	---@cast clientData -nil
 	---@cast serverData -nil

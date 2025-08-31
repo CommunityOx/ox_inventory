@@ -108,7 +108,7 @@ function server.convertInventory(playerId, items)
 				local weight = Inventory.SlotWeight(item, {count=count, metadata=metadata})
 				totalWeight = totalWeight + weight
 				slot += 1
-				returnData[slot] = {name = item.name, label = item.label, weight = weight, slot = slot, count = count, description = item.description, metadata = metadata, stack = item.stack, close = item.close}
+				returnData[slot] = {name = item.name, label = item.label, weight = weight, slot = slot, count = count, description = item.description, rarity = item.rarity, metadata = metadata, stack = item.stack, close = item.close}
 			end
 		end
 

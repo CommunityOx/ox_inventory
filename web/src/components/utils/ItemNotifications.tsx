@@ -5,6 +5,7 @@ import useNuiEvent from '../../hooks/useNuiEvent';
 import useQueue from '../../hooks/useQueue';
 import { Locale } from '../../store/locale';
 import { getItemUrl } from '../../helpers';
+import { getItemRarity } from '../../helpers';
 import { SlotWithItem } from '../../typings';
 import { Items } from '../../store/items';
 import Fade from './transitions/Fade';
@@ -30,7 +31,21 @@ const ItemNotification = React.forwardRef(
 
     return (
       <div
-        className="item-notification-item-box"
+        //className="item-notification-item-box"
+        className={`item-notification-item-box ${
+            (() => {
+              const rarityBG = getItemRarity(slotItem as SlotWithItem);
+              if (!rarityBG) return '';
+              const rarityClass: Record<number, string> = {
+                1: 'rarity1',
+                2: 'rarity2',
+                3: 'rarity3',
+                4: 'rarity4',
+                5: 'rarity5',
+              };
+              return rarityClass[rarityBG] || '';
+            })()
+          }`}
         style={{
           backgroundImage: `url(${getItemUrl(slotItem) || 'none'}`,
           ...props.style,
