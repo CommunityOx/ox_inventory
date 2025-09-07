@@ -2,6 +2,7 @@ if not lib then return end
 
 local Items = require 'modules.items.server'
 local Inventory = require 'modules.inventory.server'
+local TriggerEventHooks = require 'modules.hooks.server'
 local Shops = {}
 local locations = shared.target and 'targets' or 'locations'
 
@@ -144,6 +145,14 @@ lib.callback.register('ox_inventory:openShop', function(source, data)
 			return
 		end
 
+        local hookPayload = {
+			source = source,
+			inventoryId = shop.id,
+			inventoryType = shop.type,
+		}
+
+        if not TriggerEventHooks('openInventory', hookPayload) then return end
+
 		---@diagnostic disable-next-line: assign-type-mismatch
 		left:openInventory(left)
 		left.currentShop = shop.id
@@ -164,8 +173,6 @@ end
 local function removeCurrency(inv, currency, price)
 	Inventory.RemoveItem(inv, currency, price)
 end
-
-local TriggerEventHooks = require 'modules.hooks.server'
 
 local function isRequiredGrade(grade, rank)
 	if type(grade) == "table" then
