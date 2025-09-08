@@ -147,11 +147,13 @@ lib.callback.register('ox_inventory:openShop', function(source, data)
 
         local hookPayload = {
             source = source,
-            shopType = shop.type,
-            shopId = shop.id,
-            label = shop.name,
-            groups = shop.groups or shop.jobs,
-            coords = shop.coords
+            id = shop.id,
+            label = shop.label,
+            slots = shop.slots,
+            items = shop.items,
+            groups = shop.groups,
+            coords = shop.coords,
+            distance = shop.distance
         }
 
         if not TriggerEventHooks('openShop', hookPayload) then return end
