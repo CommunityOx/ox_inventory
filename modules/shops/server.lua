@@ -146,12 +146,15 @@ lib.callback.register('ox_inventory:openShop', function(source, data)
 		end
 
         local hookPayload = {
-			source = source,
-			inventoryId = shop.id,
-			inventoryType = shop.type,
-		}
+            source = source,
+            shopType = shop.type,
+            shopId = shop.id,
+            label = shop.name,
+            groups = shop.groups or shop.jobs,
+            coords = shop.coords
+        }
 
-        if not TriggerEventHooks('openInventory', hookPayload) then return end
+        if not TriggerEventHooks('openShop', hookPayload) then return end
 
 		---@diagnostic disable-next-line: assign-type-mismatch
 		left:openInventory(left)
