@@ -287,7 +287,7 @@ end
 ---@param invType string
 ---@param data string|number|table
 lib.callback.register('ox_inventory:openInventory', function(source, invType, data)
-    if invType == 'player' and source ~= data then
+    if invType == 'player' or invType == 'otherplayer' and source ~= data then
         local serverId = type(data) == 'table' and data.id or data
 
         if source == serverId or type(serverId) ~= 'number' then return end
