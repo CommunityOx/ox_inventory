@@ -1277,6 +1277,7 @@ RegisterNetEvent('ox_inventory:setPlayerInventory', function(currentDrops, inven
 
 	local hasTextUi
 	local uiOptions = { icon = 'fa-id-card' }
+	local hasTurnPedToFace = false
 
 	---@param point CPoint
 	local function nearbyLicense(point)
@@ -1382,7 +1383,10 @@ RegisterNetEvent('ox_inventory:setPlayerInventory', function(currentDrops, inven
 							client.closeInventory()
 							lib.notify({ id = 'inventory_lost_access', type = 'error', description = locale('inventory_lost_access') })
 						else
-							TaskTurnPedToFaceCoord(playerPed, pedCoords.x, pedCoords.y, pedCoords.z, 50)
+							if not hasTurnPedToFace then
+								hasTurnPedToFace = true
+								TaskTurnPedToFaceCoord(playerPed, pedCoords.x, pedCoords.y, pedCoords.z, 50)
+							end
 						end
 
 					elseif currentInventory.coords and (#(playerCoords - currentInventory.coords) > maxDistance or canSteal) then
