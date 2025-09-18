@@ -272,6 +272,7 @@ function client.openInventory(inv, data)
     if client.screenblur then Utils.blurIn() end
 
     currentInventory = right or defaultInventory
+    left.identifier = PlayerData.identifier
     left.items = PlayerData.inventory
     left.groups = PlayerData.groups
 
@@ -330,6 +331,7 @@ RegisterNetEvent('ox_inventory:forceOpenInventory', function(left, right)
 
 	currentInventory = right or defaultInventory
 	currentInventory.ignoreSecurityChecks = true
+    left.identifier = PlayerData.identifier
 	left.items = PlayerData.inventory
 	left.groups = PlayerData.groups
 
@@ -1189,12 +1191,14 @@ RegisterNetEvent('ox_inventory:setPlayerInventory', function(currentDrops, inven
 	if source == '' then return end
 
     ---@class PlayerData
+    ---@field identifier string
     ---@field inventory table<number, SlotWithItem?>
     ---@field weight number
     ---@field groups table<string, number>
 	PlayerData = player
 	PlayerData.id = cache.playerId
 	PlayerData.source = cache.serverId
+    PlayerData.identifier = player.identifier
     PlayerData.maxWeight = shared.playerweight
 
 	setmetatable(PlayerData, {
@@ -1591,6 +1595,7 @@ RegisterNetEvent('ox_inventory:viewInventory', function(left, right)
 	currentInventory = right or defaultInventory
 	currentInventory.ignoreSecurityChecks = true
     currentInventory.type = 'inspect'
+    left.identifier = PlayerData.identifier
 	left.items = PlayerData.inventory
 	left.groups = PlayerData.groups
 

@@ -17,6 +17,20 @@ function server.hasGroup(inv, group)
 	end
 end
 
+function server.hasIdentifier(inv, identifiers)
+	if type(identifiers) == 'table' then
+		for _, identifier in ipairs(identifiers) do
+			if inv.player.identifier == identifier then
+				return true, identifier
+			end
+		end
+	else
+		return inv.player.identifier == identifiers, identifiers
+	end
+
+	return false, nil
+end
+
 ---@diagnostic disable-next-line: duplicate-set-field
 function server.setPlayerData(player)
 	if not player.groups then
