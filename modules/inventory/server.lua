@@ -1116,7 +1116,8 @@ function Inventory.AddItem(inv, item, count, metadata, slot, cb)
 	if not inv?.slots then return false, 'invalid_inventory' end
 
 	local toSlot, slotMetadata, slotCount
-	local success, response = false
+	local success = false
+    local response
 
 	metadata = assertMetadata(metadata)
 
@@ -1720,11 +1721,8 @@ lib.callback.register('ox_inventory:swapItems', function(source, data)
             if fromData.metadata.container and toInventory.type == 'container' then return false end
             if toData and toData.metadata.container and fromInventory.type == 'container' then return false end
 
-			local container, containerItem = (not sameInventory and playerInventory.containerSlot) and (fromInventory.type == 'container' and fromInventory or toInventory)
-
-			if container then
-				containerItem = playerInventory.items[playerInventory.containerSlot]
-			end
+			local container = (not sameInventory and playerInventory.containerSlot) and (fromInventory.type == 'container' and fromInventory or toInventory)
+            local containerItem = container and playerInventory.items[playerInventory.containerSlot]
 
 			local hookPayload = {
 				source = source,
@@ -1983,7 +1981,7 @@ end)
 function Inventory.Confiscate(source)
 	local inv = Inventory(source)
 
-	if inv?.player then
+	if inv and inv.player then
 		db.saveStash(inv.owner, inv.owner, json.encode(minimal(inv)))
 		table.wipe(inv.items)
 		inv.weight = 0
@@ -1999,7 +1997,7 @@ exports('ConfiscateInventory', Inventory.Confiscate)
 function Inventory.Return(source)
 	local inv = Inventory(source)
 
-	if not inv?.player then return end
+	if not inv or not inv.player then return end
 
 	local items = MySQL.scalar.await('SELECT data FROM ox_inventory WHERE name = ?', { inv.owner })
 
