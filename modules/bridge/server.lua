@@ -2,19 +2,25 @@
 ---starting to get bulky
 
 function server.hasGroup(inv, group)
-	if type(group) == 'table' then
-		for name, rank in pairs(group) do
-			local groupRank = inv.player.groups[name]
-			if groupRank and groupRank >= (rank or 0) then
-				return name, groupRank
-			end
-		end
-	else
-		local groupRank = inv.player.groups[group]
-		if groupRank then
-			return group, groupRank
-		end
-	end
+    if type(group) == 'table' then
+        for name, req in pairs(group) do
+            local groupRank = inv.player.groups[name]
+            if type(req) == 'table' then
+                if groupRank and lib.table.contains(req, groupRank) then
+                    return name, groupRank
+                end
+            elseif type(req) == 'number' then
+                if groupRank and groupRank >= req then
+                    return name, groupRank
+                end
+            end
+        end
+    else
+        local groupRank = inv.player.groups[group]
+        if groupRank then
+            return group, groupRank
+        end
+    end
 end
 
 ---@diagnostic disable-next-line: duplicate-set-field
