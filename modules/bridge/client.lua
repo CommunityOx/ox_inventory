@@ -16,7 +16,6 @@ function client.hasGroup(group)
                 if groupRank and lib.table.contains(req, groupRank) then
                     return name, groupRank
                 end
-
             elseif type(req) == 'number' then
                 if groupRank and groupRank >= req then
                     return name, groupRank
