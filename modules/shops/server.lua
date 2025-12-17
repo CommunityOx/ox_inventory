@@ -259,7 +259,7 @@ lib.callback.register('ox_inventory:buyItem', function(source, data)
 					return false, false, { type = 'error', description = locale('cannot_carry') }
 				end
 
-				local canAfford = canAffordItem(playerInv, currency, price)
+				local canAfford = canAffordItem(playerInv, currency, price, shop.business)
 
 				if canAfford ~= true then
 					return false, false, canAfford
@@ -282,7 +282,7 @@ lib.callback.register('ox_inventory:buyItem', function(source, data)
 
 				Inventory.SetSlot(playerInv, fromItem, count, metadata, data.toSlot)
 				playerInv.weight = newWeight
-				removeCurrency(playerInv, currency, price)
+				removeCurrency(playerInv, currency, price, shop.business)
 
 				if fromData.count then
 					shop.items[data.fromSlot].count = fromData.count - count
