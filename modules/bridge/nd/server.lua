@@ -119,3 +119,22 @@ end
 function server.getOwnedVehicleId(entityId)
     return NDCore.getVehicle(entityId)?.id
 end
+
+function server.removeBusinessMoney(businessName, amount)
+    if GetResourceState("ND_Businesses") ~= "started" then
+        return false, false
+    end
+
+    local business = exports["ND_Businesses"]:getBusiness(businessName)
+    local complete = business.removeMoney(amount)
+    return false, complete
+end
+
+function server.getBusinessMoney(businessName, amount)
+    if GetResourceState("ND_Businesses") ~= "started" then
+        return false
+    end
+
+    local business = exports["ND_Businesses"]:getBusiness(businessName)
+    return business?.money
+end
