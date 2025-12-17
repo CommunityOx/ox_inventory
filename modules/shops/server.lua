@@ -60,6 +60,7 @@ local function registerShopType(shopType, properties)
 			groups = properties.groups or properties.jobs,
 			items = properties.inventory,
 			slots = #properties.inventory,
+            business = properties.business,
 			type = 'shop',
 		}
 
@@ -98,6 +99,7 @@ local function createShop(shopType, id)
 		groups = groups,
 		items = table.clone(shop.inventory),
 		slots = #shop.inventory,
+        business = shop.business,
 		type = 'shop',
 		coords = coords,
 		distance = shared.target and shop.targets?[id]?.distance,
@@ -169,8 +171,9 @@ lib.callback.register('ox_inventory:openShop', function(source, data)
 	return { label = playerInv.label, type = playerInv.type, slots = playerInv.slots, weight = playerInv.weight, maxWeight = playerInv.maxWeight }, shop
 end)
 
-local function canAffordItem(inv, currency, price)
-	local canAfford = price >= 0 and Inventory.GetItemCount(inv, currency) >= price
+local function canAffordItem(inv, currency, price, business)
+    local money = business and server.getBusinessMoney and server.getBusinessMoney(business, price) or Inventory.GetItem(inv, currency, false, true)
+	local canAfford = price >= 0 and money >= price
 
 	return canAfford or {
 		type = 'error',
@@ -178,8 +181,13 @@ local function canAffordItem(inv, currency, price)
 	}
 end
 
-local function removeCurrency(inv, currency, price)
-	Inventory.RemoveItem(inv, currency, price)
+local function removeCurrency(inv, currency, price, business)
+    local useBusiness = business and server.removeBusinessMoney
+    if useBusiness then
+        server.removeBusinessMoney(business, price)
+    else
+        Inventory.RemoveItem(inv, currency, price)
+    end
 end
 
 local function isRequiredGrade(grade, rank)
