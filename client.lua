@@ -422,7 +422,7 @@ end
 ---@param cb fun(response: SlotWithItem | false)?
 ---@param noAnim? boolean
 local function useItem(data, cb, noAnim)
-	local slotData, result = PlayerData.inventory[data.slot]
+	local slotData = PlayerData.inventory[data.slot]
 
 	if not slotData or not canUseItem(data.ammo and true) then
         if currentWeapon then
@@ -442,7 +442,7 @@ local function useItem(data, cb, noAnim)
 
     usingItem = true
     ---@type boolean?
-    result = lib.callback.await('ox_inventory:useItem', 200, data.name, data.slot, slotData.metadata, noAnim)
+    local result = lib.callback.await('ox_inventory:useItem', 200, data.name, data.slot, slotData.metadata, noAnim)
 
 	if result and cb then
 		local success, response = pcall(cb, result and slotData)
