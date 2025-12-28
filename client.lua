@@ -1511,7 +1511,7 @@ RegisterNetEvent('ox_inventory:setPlayerInventory', function(currentDrops, inven
 							currentWeapon.metadata.ammo = (weaponAmmo < currentAmmo) and 0 or currentAmmo
 
 							if currentAmmo <= 0 then
-								SetPedInfiniteAmmo(playerPed, false, currentWeapon.hash)
+								SetPedInfiniteAmmoClip(playerPed, false)
 							end
 						else
 							currentAmmo = GetAmmoInPedWeapon(playerPed, currentWeapon.hash)
