@@ -1382,7 +1382,8 @@ RegisterNetEvent('ox_inventory:setPlayerInventory', function(currentDrops, inven
 							client.closeInventory()
 							lib.notify({ id = 'inventory_lost_access', type = 'error', description = locale('inventory_lost_access') })
 						else
-							TaskTurnPedToFaceCoord(playerPed, pedCoords.x, pedCoords.y, pedCoords.z, 50)
+							local heading = GetHeadingFromVector_2d(pedCoords.x - playerCoords.x, pedCoords.y - playerCoords.y)
+							SetEntityHeading(playerPed, heading)
 						end
 
 					elseif currentInventory.coords and (#(playerCoords - currentInventory.coords) > maxDistance or canSteal) then
