@@ -1,26 +1,33 @@
 ---@todo separate module into smaller submodules to handle each framework
 ---starting to get bulky
 
+---Checks whether the inventory player has a required group and rank
+---@param inv table
+---@param group string | table<string, number | number[]>
+---@return string? groupName
+---@return number? groupRank
 function server.hasGroup(inv, group)
-    if type(group) == 'table' then
-        for name, req in pairs(group) do
-            local groupRank = inv.player.groups[name]
-            if type(req) == 'table' then
-                if groupRank and lib.table.contains(req, groupRank) then
-                    return name, groupRank
-                end
-            elseif type(req) == 'number' then
-                if groupRank and groupRank >= req then
-                    return name, groupRank
-                end
-            end
-        end
-    else
-        local groupRank = inv.player.groups[group]
-        if groupRank then
-            return group, groupRank
-        end
-    end
+	if type(group) == 'table' then
+		for name, requiredRank in pairs(group) do
+			local groupRank = inv.player.groups[name]
+			if groupRank then
+				if type(requiredRank) == 'table' then
+					if lib.table.contains(requiredRank, groupRank) then
+						return name, groupRank
+					end
+				else
+					if groupRank >= (requiredRank or 0) then
+						return name, groupRank
+					end
+				end
+			end
+		end
+	else
+		local groupRank = inv.player.groups[group]
+		if groupRank then
+			return group, groupRank
+		end
+	end
 end
 
 ---@diagnostic disable-next-line: duplicate-set-field
