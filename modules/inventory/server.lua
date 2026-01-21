@@ -2767,7 +2767,8 @@ exports('InspectInventory', Inventory.InspectInventory)
 ---@param invType? 'trunk'|'glovebox' Type of vehicle inventory (default: 'trunk')
 ---@param source? number Player source for fallback vehicle class lookup
 ---@return string|nil inventoryId The created inventory ID, or nil on failure
-function Inventory.RegisterVehicleInventory(vehicleNetId, invType, source)
+function Inventory.RegisterVehicleInventory(vehicleNetId, invType)
+	local source = source
 	if not vehicleNetId then
 		return lib.print.error('RegisterVehicleInventory: vehicleNetId is required')
 	end
