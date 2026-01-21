@@ -1,6 +1,7 @@
 if not lib then return end
 
 local Inventory = {}
+local Vehicles = lib.load('data.vehicles')
 
 ---@type table<any, OxInventory>
 local Inventories = {}
@@ -2760,5 +2761,119 @@ function Inventory.InspectInventory(playerId, invId)
 end
 
 exports('InspectInventory', Inventory.InspectInventory)
+
+---Register a vehicle trunk or glovebox inventory without requiring client interaction
+---@param vehicleNetId number Network ID of the vehicle
+---@param invType? 'trunk'|'glovebox' Type of vehicle inventory (default: 'trunk')
+---@param source? number Player source for fallback vehicle class lookup
+---@return string|nil inventoryId The created inventory ID, or nil on failure
+function Inventory.RegisterVehicleInventory(vehicleNetId, invType, source)
+	if not vehicleNetId then
+		return lib.print.error('RegisterVehicleInventory: vehicleNetId is required')
+	end
+
+	invType = invType or 'trunk'
+	
+	if invType ~= 'trunk' and invType ~= 'glovebox' then
+		return lib.print.error('RegisterVehicleInventory: invType must be "trunk" or "glovebox"')
+	end
+
+	-- Get the vehicle entity from network ID
+	local entity = NetworkGetEntityFromNetworkId(vehicleNetId)
+	
+	if not entity or entity == 0 then
+		return lib.print.error('RegisterVehicleInventory: invalid vehicle network ID')
+	end
+
+	if not DoesEntityExist(entity) then
+		return lib.print.error('RegisterVehicleInventory: vehicle entity does not exist')
+	end
+
+	-- Get vehicle plate
+	local plate = GetVehicleNumberPlateText(entity)
+	
+	if not plate then
+		return lib.print.error('RegisterVehicleInventory: could not get vehicle plate')
+	end
+
+	-- Trim plate if configured
+	if server.trimplate then
+		plate = string.strtrim(plate)
+	end
+
+	-- Build inventory ID
+	local inventoryId = (invType == 'glovebox' and 'glove' or 'trunk') .. plate
+
+	-- Check if inventory already exists
+	local existingInventory = Inventories[inventoryId]
+	
+	if existingInventory then
+		-- Update netid if it changed
+		if existingInventory.netid ~= vehicleNetId then
+			existingInventory.netid = vehicleNetId
+			existingInventory.entityId = entity
+		end
+		return inventoryId
+	end
+
+	-- Get vehicle model
+	local model = GetEntityModel(entity)
+
+	-- Try to get storage from model first
+	local storage = Vehicles[invType].models[model]
+	
+	-- If not found by model, we need the class (requires client callback)
+	if not storage then
+		if not source then
+			source = NetworkGetEntityOwner(entity)
+		end
+		
+		if not source or source == 0 then
+			return lib.print.error('RegisterVehicleInventory: cannot determine vehicle class without player source')
+		end
+		
+		-- Get vehicle class from client
+		local _, class = lib.callback.await('ox_inventory:getVehicleData', source, vehicleNetId)
+		storage = Vehicles[invType][class]
+	end
+	
+	if not storage then
+		return lib.print.error(('RegisterVehicleInventory: no storage config found for model %s'):format(model))
+	end
+
+	-- Get database ID
+	local dbId
+	if server.getOwnedVehicleId then
+		dbId = server.getOwnedVehicleId(entity)
+	else
+		dbId = plate
+	end
+
+	-- Create the inventory
+	local inventory = Inventory.Create(
+		inventoryId,    -- ID: 'trunkABC123' or 'gloveABC123'
+		plate,          -- Label: vehicle plate
+		invType,        -- Type: 'trunk' or 'glovebox'
+		storage[1],     -- Slots
+		0,              -- Current weight
+		storage[2],     -- Max weight
+		false,          -- Owner
+		nil,            -- Items (will be loaded from DB)
+		nil,            -- Groups
+		dbId            -- Database ID
+	)
+
+	if not inventory then
+		return lib.print.error('RegisterVehicleInventory: failed to create inventory')
+	end
+
+	-- Store network ID and entity reference
+	inventory.netid = vehicleNetId
+	inventory.entityId = entity
+
+	return inventoryId
+end
+
+exports('RegisterVehicleInventory', Inventory.RegisterVehicleInventory)
 
 return Inventory
