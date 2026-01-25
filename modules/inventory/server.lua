@@ -2764,7 +2764,7 @@ exports('InspectInventory', Inventory.InspectInventory)
 ---@param inventoryId string The inventory ID to register
 ---@param invType? 'trunk'|'glovebox' Type of vehicle inventory (default: 'trunk')
 ---@return string|nil inventoryId The created inventory ID, or nil on failure
-local function Inventory.RegisterVehicleInventory(source, inventoryId, vehicleNetId, invType)
+function Inventory.RegisterVehicleInventory(source, inventoryId, vehicleNetId, invType)
 
 	if not inventoryId then
 		return lib.print.error('RegisterVehicleInventory: inventoryId is required')
