@@ -112,12 +112,13 @@ local function loadInventoryData(data, player, ignoreSecurityChecks)
 		end
 	end
 
-	if data.type == 'trunk' or data.type == 'glovebox' then
-		local plate = data.id:sub(6)
+	local isTrunk = data.type == 'trunk'
+	if isTrunk or data.type == 'glovebox' then
+		local plate = data.id:sub(isTrunk and 6 or 9)
 
 		if server.trimplate then
 			plate = string.strtrim(plate)
-			data.id = ('%s%s'):format(data.id:sub(1, 5), plate)
+			data.id = ('%s%s'):format(data.id:sub(1, isTrunk and 5 or 8), plate)
 		end
 
 		inventory = Inventories[data.id]
@@ -168,7 +169,7 @@ local function loadInventoryData(data, player, ignoreSecurityChecks)
             if server.getOwnedVehicleId then
                 dbId = server.getOwnedVehicleId(entity)
             else
-                dbId = data.id:sub(6)
+                dbId = data.id:sub(isTrunk and 6 or 9)
             end
 
             inventory = Inventory.Create(data.id, plate, data.type, storage[1], 0, storage[2], false, nil, nil, dbId)
