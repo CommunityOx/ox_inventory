@@ -461,7 +461,7 @@ local function useItem(data, cb, noAnim)
 end
 
 AddEventHandler('ox_inventory:usedItem', function(name, slot, metadata)
-    TriggerServerEvent('ox_inventory:usedItemInternal', slot)
+    TriggerServerEvent('ox_inventory:usedItemInternal', slot, name)
 end)
 
 AddEventHandler('ox_inventory:item', useItem)
@@ -504,9 +504,15 @@ local function useSlot(slot, noAnim)
 			if invOpen and data.close then client.closeInventory() end
 
 			if data.export then
-				return data.export(data, {name = item.name, slot = item.slot, metadata = item.metadata})
+				local result = data.export(data, {name = item.name, slot = item.slot, metadata = item.metadata})
+				if result ~= false then
+					TriggerEvent('ox_inventory:usedItem', item.name, item.slot, next(item.metadata) and item.metadata)
+				end
+				return result
 			elseif data.client.event then -- re-add it, so I don't need to deal with morons taking screenshots of errors when using trigger event
-				return TriggerEvent(data.client.event, data, {name = item.name, slot = item.slot, metadata = item.metadata})
+				TriggerEvent(data.client.event, data, {name = item.name, slot = item.slot, metadata = item.metadata})
+				TriggerEvent('ox_inventory:usedItem', item.name, item.slot, next(item.metadata) and item.metadata)
+				return
 			end
 		end
 

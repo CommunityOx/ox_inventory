@@ -363,23 +363,39 @@ lib.callback.register('ox_inventory:getInventory', function(source, id)
 	}
 end)
 
-RegisterNetEvent('ox_inventory:usedItemInternal', function(slot)
+-- Supports both normal path (usingItem set by ox_inventory:useItem) and export path (slot + itemName from client).
+RegisterNetEvent('ox_inventory:usedItemInternal', function(slot, itemName)
     local inventory = Inventory(source)
 
     if not inventory then return end
 
-    local item = inventory.usingItem
+    ---@cast inventory OxInventory
+    if type(slot) ~= 'number' then return end
 
-    if not item or item.slot ~= slot then
-        ---@todo
+    local item = nil
+    local usedUsingItem = false
+
+    if inventory.usingItem and inventory.usingItem.slot == slot and (not itemName or inventory.usingItem.name == itemName) then
+        item = inventory.usingItem
+        usedUsingItem = true
+    elseif type(itemName) == 'string' and itemName ~= '' then
+        local slotItem = inventory.items[slot]
+        if slotItem and slotItem.name == itemName then
+            item = slotItem
+            if not item.slot then item.slot = slot end
+        end
+    end
+
+    if not item or not item.name or not item.slot then
         DropPlayer(inventory.id, 'sussy')
-
         return
     end
 
     TriggerEvent('ox_inventory:usedItem', inventory.id, item.name, item.slot, next(item.metadata) and item.metadata)
 
-    inventory.usingItem = nil
+    if usedUsingItem then
+        inventory.usingItem = nil
+    end
 end)
 
 ---@param source number

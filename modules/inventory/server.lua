@@ -6,6 +6,7 @@ local Inventory = {}
 local Inventories = {}
 
 ---@class OxInventory
+---@field usingItem table? Set during useItem callback flow; cleared by usedItemInternal. Item data: name, label, count, slot, metadata, weight.
 local OxInventory = {}
 OxInventory.__index = OxInventory
 
