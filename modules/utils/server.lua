@@ -5,10 +5,6 @@ local Utils = {}
 local webHook = GetConvar('inventory:webhook', '')
 
 if webHook ~= '' then
-	local validHosts = {
-		['i.imgur.com'] = true,
-	}
-
 	local validExtensions = {
 		['png'] = true,
 		['apng'] = true,
@@ -36,7 +32,7 @@ if webHook ~= '' then
 
             if not host or not extension then return false end
 
-            return validHosts[host] and validExtensions[extension]
+            return server.validhosts[host] and validExtensions[extension]
         end
 
         return false
