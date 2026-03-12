@@ -243,7 +243,6 @@ end
 ---@return string
 local function defaultGetPlayerName(serverID)
     local playerName = GetPlayerName(serverID)
-    ---@diagnostic disable-next-line: inject-field
     return ('[%d] %s'):format(serverID, playerName)
 end
 
