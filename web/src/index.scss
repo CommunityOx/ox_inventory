@@ -1,5 +1,6 @@
 // ============================================================
 // OX INVENTORY - Modern Apple-Inspired Design
+// Compatible with FiveM NUI (CEF - no backdrop-filter)
 // ============================================================
 
 // --- Design Tokens ---
@@ -7,22 +8,20 @@ $mainFont: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvet
 $textColor: rgba(255, 255, 255, 0.92);
 $textSecondary: rgba(255, 255, 255, 0.55);
 
-// Glass/Frosted backgrounds
-$glassBg: rgba(28, 28, 30, 0.72);
-$glassBgLight: rgba(44, 44, 46, 0.55);
-$glassBgDark: rgba(18, 18, 20, 0.82);
-$glassBgHover: rgba(58, 58, 62, 0.6);
+// Solid semi-transparent backgrounds (no backdrop-filter needed)
+$panelBg: rgba(30, 30, 32, 0.88);
+$slotBg: rgba(255, 255, 255, 0.06);
+$slotBgHover: rgba(255, 255, 255, 0.1);
+$controlBg: rgba(255, 255, 255, 0.08);
+$controlBgHover: rgba(255, 255, 255, 0.14);
+$inputBgFocus: rgba(255, 255, 255, 0.12);
 $glassBorder: rgba(255, 255, 255, 0.08);
-$glassBorderLight: rgba(255, 255, 255, 0.12);
+$glassBorderLight: rgba(255, 255, 255, 0.14);
 
 // Accent
 $accentBlue: #0a84ff;
 $accentGreen: #30d158;
 $accentRed: #ff453a;
-
-// Blur
-$blurAmount: 24px;
-$blurAmountLight: 16px;
 
 // Grid
 $gridCols: 5;
@@ -90,9 +89,7 @@ input[type='number']::-webkit-outer-spin-button {
 // --- Context Menu (Apple-style dropdown) ---
 .context-menu-list {
   min-width: 200px;
-  background: $glassBg;
-  backdrop-filter: blur($blurAmount);
-  -webkit-backdrop-filter: blur($blurAmount);
+  background: $panelBg;
   color: $textColor;
   padding: 4px;
   border: 1px solid $glassBorder;
@@ -191,14 +188,12 @@ button:active {
     outline: none;
     border: 1px solid $glassBorder;
     color: $textColor;
-    background: $glassBgLight;
-    backdrop-filter: blur($blurAmountLight);
-    -webkit-backdrop-filter: blur($blurAmountLight);
+    background: $controlBg;
     width: 80px;
     letter-spacing: -0.01em;
 
     &:focus-within {
-      background: $glassBgDark;
+      background: $inputBgFocus;
       border-color: $accentBlue;
       box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.2);
     }
@@ -208,9 +203,7 @@ button:active {
     font-size: 13px;
     font-weight: 600;
     color: $textColor;
-    background: $glassBgLight;
-    backdrop-filter: blur($blurAmountLight);
-    -webkit-backdrop-filter: blur($blurAmountLight);
+    background: $controlBg;
     transition: all 200ms ease;
     padding: 12px 16px;
     border-radius: $radiusMd;
@@ -222,7 +215,7 @@ button:active {
     cursor: pointer;
 
     &:hover {
-      background: $glassBgHover;
+      background: $controlBgHover;
       border-color: $glassBorderLight;
     }
   }
@@ -230,9 +223,7 @@ button:active {
 
 // --- Useful Controls Dialog ---
 .useful-controls-dialog {
-  background: $glassBg;
-  backdrop-filter: blur($blurAmount);
-  -webkit-backdrop-filter: blur($blurAmount);
+  background: $panelBg;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -250,7 +241,6 @@ button:active {
 
 .useful-controls-dialog-overlay {
   background-color: rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(4px);
 }
 
 .useful-controls-dialog-title {
@@ -307,14 +297,12 @@ button:active {
   align-items: center;
   fill: rgba(255, 255, 255, 0.7);
   border-radius: 50% !important;
-  background: $glassBgLight !important;
-  backdrop-filter: blur($blurAmountLight);
-  -webkit-backdrop-filter: blur($blurAmountLight);
+  background: $controlBg !important;
   box-shadow: $shadowMd;
   cursor: pointer;
 
   &:hover {
-    background: $glassBgHover !important;
+    background: $controlBgHover !important;
     fill: white;
     transform: scale(1.05);
   }
@@ -333,9 +321,7 @@ button:active {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  background: $glassBg;
-  backdrop-filter: blur($blurAmount);
-  -webkit-backdrop-filter: blur($blurAmount);
+  background: $panelBg;
   padding: 14px;
   border-radius: $radiusXl;
   border: 1px solid $glassBorder;
@@ -373,7 +359,7 @@ button:active {
 
 // --- Inventory Slots (Core card-style) ---
 .inventory-slot {
-  background-color: $glassBgLight;
+  background-color: $slotBg;
   background-repeat: no-repeat;
   background-position: center;
   border-radius: $radiusMd;
@@ -385,14 +371,14 @@ button:active {
   transition: all 180ms ease;
 
   &:hover {
-    background-color: $glassBgHover;
+    background-color: $slotBgHover;
     border-color: $glassBorderLight;
     transform: scale(1.02);
   }
 }
 
 .inventory-slot-label-box {
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.15));
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.55), transparent);
   color: rgba(255, 255, 255, 0.9);
   text-align: center;
   border-bottom-left-radius: calc($radiusMd - 1px);
@@ -490,13 +476,11 @@ button:active {
   }
 }
 
-// --- Tooltip (Frosted glass) ---
+// --- Tooltip ---
 .tooltip-wrapper {
   pointer-events: none;
   display: flex;
-  background: $glassBg;
-  backdrop-filter: blur($blurAmount);
-  -webkit-backdrop-filter: blur($blurAmount);
+  background: $panelBg;
   width: 220px;
   padding: 12px;
   flex-direction: column;
@@ -604,7 +588,7 @@ button:active {
 .item-notification-action-box {
   width: 100%;
   color: $textColor;
-  background: $glassBgLight;
+  background: $controlBg;
   text-transform: uppercase;
   text-align: center;
   border-top-left-radius: $radiusSm;
