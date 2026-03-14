@@ -132,7 +132,8 @@ const InventorySlot: React.ForwardRefRenderFunction<HTMLDivElement, SlotProps> =
             : undefined,
         opacity: isDragging ? 0.4 : 1.0,
         backgroundImage: `url(${item?.name ? getItemUrl(item as SlotWithItem) : 'none'}`,
-        border: isOver ? '1px dashed rgba(255,255,255,0.4)' : '',
+        border: isOver ? '1px solid rgba(10,132,255,0.6)' : '',
+        boxShadow: isOver ? '0 0 0 2px rgba(10,132,255,0.25), inset 0 0 12px rgba(10,132,255,0.1)' : '',
       }}
     >
       {isSlotWithItem(item) && (
@@ -198,7 +199,7 @@ const InventorySlot: React.ForwardRefRenderFunction<HTMLDivElement, SlotProps> =
                     {item.price > 0 && (
                       <div
                         className="item-slot-price-wrapper"
-                        style={{ color: item.currency === 'money' || !item.currency ? '#2ECC71' : '#E74C3C' }}
+                        style={{ color: item.currency === 'money' || !item.currency ? '#30d158' : '#ff453a' }}
                       >
                         <p>
                           {Locale.$ || '$'}

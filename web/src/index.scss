@@ -1,28 +1,58 @@
-$mainColor: #22232c;
-$textColor: #c1c2c5;
-$mainFont: Roboto;
+// ============================================================
+// OX INVENTORY - Modern Apple-Inspired Design
+// ============================================================
 
-$secondaryColor: rgba(12, 12, 12, 0.4);
-$secondaryColorHighlight: #33343F;
-$secondaryColorLight: rgba(0, 0, 0, 0.5);
-$secondaryColorDark: rgba(12, 12, 12, 0.8);
+// --- Design Tokens ---
+$mainFont: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+$textColor: rgba(255, 255, 255, 0.92);
+$textSecondary: rgba(255, 255, 255, 0.55);
 
+// Glass/Frosted backgrounds
+$glassBg: rgba(28, 28, 30, 0.72);
+$glassBgLight: rgba(44, 44, 46, 0.55);
+$glassBgDark: rgba(18, 18, 20, 0.82);
+$glassBgHover: rgba(58, 58, 62, 0.6);
+$glassBorder: rgba(255, 255, 255, 0.08);
+$glassBorderLight: rgba(255, 255, 255, 0.12);
+
+// Accent
+$accentBlue: #0a84ff;
+$accentGreen: #30d158;
+$accentRed: #ff453a;
+
+// Blur
+$blurAmount: 24px;
+$blurAmountLight: 16px;
+
+// Grid
 $gridCols: 5;
 $gridRows: 5;
 $gridSize: 10.2vh;
-$gridGap: 2px;
+$gridGap: 4px;
 $containerSize: calc(#{$gridRows} * #{$gridSize + 0.22vh} + #{$gridRows} * #{$gridGap});
 
+// Radius
+$radiusSm: 8px;
+$radiusMd: 12px;
+$radiusLg: 16px;
+$radiusXl: 20px;
+
+// Shadows
+$shadowSm: 0 1px 3px rgba(0, 0, 0, 0.3);
+$shadowMd: 0 4px 12px rgba(0, 0, 0, 0.35);
+$shadowLg: 0 8px 32px rgba(0, 0, 0, 0.4);
+
+// --- Base Styles ---
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
-    'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: $mainFont;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100vh;
   background: none !important;
   overflow: hidden !important;
   user-select: none;
+  letter-spacing: -0.01em;
 }
 
 #root {
@@ -30,7 +60,7 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-family: 'SF Mono', 'Fira Code', Menlo, Monaco, Consolas, monospace;
 }
 
 ::-webkit-scrollbar {
@@ -50,57 +80,68 @@ input[type='number']::-webkit-outer-spin-button {
   appearance: none;
 }
 
+// --- App Wrapper ---
 .app-wrapper {
   height: 100%;
   width: 100%;
-  color: white;
+  color: $textColor;
 }
 
+// --- Context Menu (Apple-style dropdown) ---
 .context-menu-list {
   min-width: 200px;
-  background-color: $mainColor;
+  background: $glassBg;
+  backdrop-filter: blur($blurAmount);
+  -webkit-backdrop-filter: blur($blurAmount);
   color: $textColor;
   padding: 4px;
-  border-color: rgba(0, 0, 0, 0.2);
-  border-style: inset;
-  border-width: 1px;
-  border-radius: 4px;
+  border: 1px solid $glassBorder;
+  border-radius: $radiusMd;
   outline: none;
   display: flex;
   flex-direction: column;
+  box-shadow: $shadowLg;
 }
 
-.context-menu-item  {
-  padding: 8px;
-  border-radius: 4px;
+.context-menu-item {
+  padding: 8px 12px;
+  border-radius: $radiusSm;
   background-color: transparent;
   outline: none;
   border: none;
   color: $textColor;
+  font-family: $mainFont;
+  font-size: 13px;
+  font-weight: 400;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition: background-color 150ms ease;
+
   &:active {
     transform: none;
   }
   &:hover {
-    background-color: $secondaryColorHighlight;
+    background-color: $accentBlue;
     cursor: pointer;
   }
 }
 
+// --- Tooltip ---
 .tooltip-description {
-  padding-top: 5px;
+  padding-top: 6px;
 }
 
 .tooltip-markdown > p {
   margin: 0;
 }
 
+// --- Buttons ---
 button:active {
-  transform: translateY(3px);
+  transform: translateY(1px);
 }
 
+// --- Drag Preview ---
 .item-drag-preview {
   width: 7.7vh;
   height: 7.7vh;
@@ -113,65 +154,85 @@ button:active {
   background-position: center;
   background-size: 7vh;
   image-rendering: -webkit-optimize-contrast;
+  opacity: 0.85;
+  border-radius: $radiusMd;
 }
 
+// --- Inventory Layout ---
 .inventory-wrapper {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   height: 100%;
-
-  gap: 20px;
+  gap: 16px;
 }
 
+// --- Control Panel (center) ---
 .inventory-control {
   display: flex;
 
   .inventory-control-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
     justify-content: center;
     align-items: center;
   }
 
   .inventory-control-input {
-    transition: 200ms;
-    padding: 16px 8px;
-    border-radius: 2.5%;
+    transition: all 200ms ease;
+    padding: 14px 12px;
+    border-radius: $radiusMd;
     font-family: $mainFont;
-    font-size: 16px;
+    font-size: 15px;
+    font-weight: 500;
     text-align: center;
     outline: none;
-    border: none;
-    color: #fff;
-    background-color: $secondaryColor;
+    border: 1px solid $glassBorder;
+    color: $textColor;
+    background: $glassBgLight;
+    backdrop-filter: blur($blurAmountLight);
+    -webkit-backdrop-filter: blur($blurAmountLight);
+    width: 80px;
+    letter-spacing: -0.01em;
+
     &:focus-within {
-      background-color: $secondaryColorDark;
+      background: $glassBgDark;
+      border-color: $accentBlue;
+      box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.2);
     }
   }
 
   .inventory-control-button {
-    font-size: 14px;
-    color: #fff;
-    background-color: $secondaryColor;
-    transition: 200ms;
-    padding: 12px 8px;
-    border-radius: 2.5%;
-    border: none;
+    font-size: 13px;
+    font-weight: 600;
+    color: $textColor;
+    background: $glassBgLight;
+    backdrop-filter: blur($blurAmountLight);
+    -webkit-backdrop-filter: blur($blurAmountLight);
+    transition: all 200ms ease;
+    padding: 12px 16px;
+    border-radius: $radiusMd;
+    border: 1px solid $glassBorder;
     text-transform: uppercase;
     font-family: $mainFont;
     width: 100%;
-    font-weight: 500;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+
     &:hover {
-      background-color: $secondaryColorDark;
+      background: $glassBgHover;
+      border-color: $glassBorderLight;
     }
   }
 }
 
+// --- Useful Controls Dialog ---
 .useful-controls-dialog {
-  background-color: $mainColor;
+  background: $glassBg;
+  backdrop-filter: blur($blurAmount);
+  -webkit-backdrop-filter: blur($blurAmount);
   position: absolute;
   top: 50%;
   left: 50%;
@@ -180,13 +241,16 @@ button:active {
   width: 450px;
   display: flex;
   flex-direction: column;
-  padding: 16px;
-  border-radius: 4px;
+  padding: 20px;
+  border-radius: $radiusLg;
+  border: 1px solid $glassBorder;
   gap: 16px;
+  box-shadow: $shadowLg;
 }
 
 .useful-controls-dialog-overlay {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
 }
 
 .useful-controls-dialog-title {
@@ -194,20 +258,25 @@ button:active {
   width: 100%;
   justify-content: space-between;
   align-items: center;
-  font-size: 18px;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 
 .useful-controls-dialog-close {
-  width: 25px;
-  height: 25px;
+  width: 28px;
+  height: 28px;
   padding: 6px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 4px;
-  fill: $textColor;
+  border-radius: 50%;
+  fill: $textSecondary;
+  transition: all 150ms ease;
+
   &:hover {
-    background-color: $secondaryColorHighlight;
+    background-color: rgba(255, 255, 255, 0.1);
+    fill: $textColor;
     cursor: pointer;
   }
 }
@@ -221,27 +290,33 @@ button:active {
 .divider {
   width: 100%;
   height: 1px;
-  background-color: rgba(255, 255, 255, 0.12);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
 }
 
 .useful-controls-button {
   position: absolute !important;
   bottom: 25px;
   right: 25px;
-  transition: 200ms !important;
-  border: none;
+  transition: all 200ms ease !important;
+  border: 1px solid $glassBorder !important;
   color: white;
-  width: 52px;
-  height: 52px;
+  width: 48px;
+  height: 48px;
   display: flex;
   justify-content: center;
   align-items: center;
-  fill: white;
-  border-radius: 5% !important;
-  background-color: $secondaryColor !important;
+  fill: rgba(255, 255, 255, 0.7);
+  border-radius: 50% !important;
+  background: $glassBgLight !important;
+  backdrop-filter: blur($blurAmountLight);
+  -webkit-backdrop-filter: blur($blurAmountLight);
+  box-shadow: $shadowMd;
+  cursor: pointer;
+
   &:hover {
-    background-color: $secondaryColorDark !important;
-    cursor: pointer;
+    background: $glassBgHover !important;
+    fill: white;
+    transform: scale(1.05);
   }
 }
 
@@ -249,25 +324,41 @@ button:active {
   position: absolute !important;
   right: 8px;
   top: 8px;
-  border-radius: 2.5% !important;
-  color: grey !important;
+  border-radius: 50% !important;
+  color: $textSecondary !important;
 }
 
-// Dialog is used fro useful controls window
-
-
-// inventory grids
+// --- Inventory Grid ---
 .inventory-grid-wrapper {
   display: flex;
   flex-direction: column;
-  gap: calc($gridGap * 2);
+  gap: 8px;
+  background: $glassBg;
+  backdrop-filter: blur($blurAmount);
+  -webkit-backdrop-filter: blur($blurAmount);
+  padding: 14px;
+  border-radius: $radiusXl;
+  border: 1px solid $glassBorder;
+  box-shadow: $shadowLg;
 }
+
 .inventory-grid-header-wrapper {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+  padding: 0 4px;
+
   p {
-    font-size: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+
+    &:last-child {
+      color: $textSecondary;
+      font-weight: 400;
+      font-size: 13px;
+    }
   }
 }
 
@@ -280,52 +371,58 @@ button:active {
   overflow-y: scroll;
 }
 
-// inventory slots
+// --- Inventory Slots (Core card-style) ---
 .inventory-slot {
-  background-color: $secondaryColor;
+  background-color: $glassBgLight;
   background-repeat: no-repeat;
   background-position: center;
-  border-radius: 2.5%;
+  border-radius: $radiusMd;
   image-rendering: -webkit-optimize-contrast;
   position: relative;
   background-size: 7vh;
   color: $textColor;
-  border-color: rgba(0, 0, 0, 0.2);
-  border-style: inset;
-  border-width: 1px;
+  border: 1px solid $glassBorder;
+  transition: all 180ms ease;
+
+  &:hover {
+    background-color: $glassBgHover;
+    border-color: $glassBorderLight;
+    transform: scale(1.02);
+  }
 }
 
 .inventory-slot-label-box {
-  background-color: $mainColor;
-  color: $textColor;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.15));
+  color: rgba(255, 255, 255, 0.9);
   text-align: center;
-  border-bottom-left-radius: 0.25vh;
-  border-bottom-right-radius: 0.25vh;
-  border-top-color: rgba(0, 0, 0, 0.2);
-  border-top-style: inset;
-  border-top-width: 1px;
+  border-bottom-left-radius: calc($radiusMd - 1px);
+  border-bottom-right-radius: calc($radiusMd - 1px);
 }
 
 .inventory-slot-label-text {
-  text-transform: uppercase;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding: 2px 3px;
-  font-weight: 400;
+  padding: 3px 5px;
+  font-weight: 500;
   font-family: $mainFont;
-  font-size: 12px;
+  font-size: 11px;
+  letter-spacing: -0.01em;
 }
 
 .inventory-slot-number {
-  background-color: white;
-  color: black;
+  background: $accentBlue;
+  color: white;
   height: 12px;
-  border-top-left-radius: 0.25vh;
-  border-bottom-right-radius: 0.25vh;
-  padding: 3px;
-  font-size: 12px;
+  border-radius: 6px;
+  padding: 2px 6px;
+  font-size: 11px;
+  font-weight: 600;
   font-family: $mainFont;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 3px;
 }
 
 .item-slot-wrapper {
@@ -333,8 +430,10 @@ button:active {
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
+
   p {
-    font-size: 12px;
+    font-size: 11px;
+    font-weight: 500;
   }
 }
 
@@ -353,10 +452,14 @@ button:active {
   display: flex;
   flex-direction: row;
   align-self: flex-end;
-  padding: 3px;
-  gap: 3px;
+  padding: 3px 5px;
+  gap: 4px;
+
   p {
-    font-size: 12px;
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.75);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   }
 }
 
@@ -365,10 +468,12 @@ button:active {
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
-  padding-right: 3px;
+  padding-right: 5px;
+
   p {
-    font-size: 14px;
-    text-shadow: 0.1vh 0.1vh 0 rgba(0, 0, 0, 0.7);
+    font-size: 13px;
+    font-weight: 600;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   }
 }
 
@@ -376,31 +481,37 @@ button:active {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  padding-right: 3px;
+  padding-right: 5px;
+
   p {
-    font-size: 14px;
-    text-shadow: 0.1vh 0.1vh 0 rgba(0, 0, 0, 0.7);
+    font-size: 13px;
+    font-weight: 600;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   }
 }
 
-
+// --- Tooltip (Frosted glass) ---
 .tooltip-wrapper {
   pointer-events: none;
   display: flex;
-  background-color: $mainColor;
-  width: 200px;
-  padding: 8px;
+  background: $glassBg;
+  backdrop-filter: blur($blurAmount);
+  -webkit-backdrop-filter: blur($blurAmount);
+  width: 220px;
+  padding: 12px;
   flex-direction: column;
   min-width: 200px;
   color: $textColor;
   font-family: $mainFont;
-  border-radius: 4px;
-  border-color: rgba(0, 0, 0, 0.2);
-  border-style: inset;
-  border-width: 1px;
+  border-radius: $radiusMd;
+  border: 1px solid $glassBorder;
+  box-shadow: $shadowLg;
+  gap: 4px;
+
   p {
     font-size: 12px;
     font-weight: 400;
+    color: $textSecondary;
   }
 }
 
@@ -409,9 +520,12 @@ button:active {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+
   p {
-    font-size: 15px;
-    font-weight: 400;
+    font-size: 14px;
+    font-weight: 600;
+    color: $textColor;
+    letter-spacing: -0.01em;
   }
 }
 
@@ -420,34 +534,40 @@ button:active {
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  color: $textSecondary;
+
   svg {
-    padding-right: 3px;
+    padding-right: 4px;
   }
+
   p {
-    font-size: 14px;
+    font-size: 13px;
   }
 }
 
 .tooltip-ingredients {
-  padding-top: 5px;
+  padding-top: 6px;
 }
 
 .tooltip-ingredient {
   display: flex;
   flex-direction: row;
   align-items: center;
+  padding: 2px 0;
+
   img {
-    width: 28px;
-    height: 28px;
-    padding-right: 5px;
+    width: 26px;
+    height: 26px;
+    padding-right: 6px;
+    border-radius: 4px;
   }
 }
 
-// hotbar
+// --- Hotbar (Bottom bar) ---
 .hotbar-container {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: $gridGap;
   justify-content: center;
   width: 100%;
   position: absolute;
@@ -458,6 +578,7 @@ button:active {
   @extend .inventory-slot;
   width: $gridSize;
   height: $gridSize;
+  box-shadow: $shadowMd;
 }
 
 .hotbar-slot-header-wrapper {
@@ -466,34 +587,35 @@ button:active {
   justify-content: space-between;
 }
 
-// item notifications
-
+// --- Item Notifications ---
 .item-notification-container {
   display: flex;
   overflow-x: scroll;
   flex-wrap: nowrap;
-  gap: 2px;
+  gap: $gridGap;
   position: absolute;
   bottom: 20vh;
   left: 50%;
   width: 100%;
-  margin-left: calc(50% - calc($gridSize/2));
+  margin-left: calc(50% - calc($gridSize / 2));
   transform: translate(-50%);
 }
 
 .item-notification-action-box {
   width: 100%;
   color: $textColor;
-  background-color: $secondaryColor;
+  background: $glassBgLight;
   text-transform: uppercase;
   text-align: center;
-  border-top-left-radius: 0.25vh;
-  border-top-right-radius: 0.25vh;
+  border-top-left-radius: $radiusSm;
+  border-top-right-radius: $radiusSm;
   font-family: $mainFont;
+
   p {
     font-size: 11px;
-    padding: 2px;
+    padding: 3px;
     font-weight: 600;
+    letter-spacing: 0.03em;
   }
 }
 
@@ -501,54 +623,66 @@ button:active {
   @extend .inventory-slot;
   height: $gridSize;
   width: $gridSize;
+  box-shadow: $shadowMd;
 }
 
+// --- Weight / Durability Bars ---
 .durability-bar {
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(255, 255, 255, 0.08);
   height: 3px;
   overflow: hidden;
+  border-radius: 2px;
 }
 
 .weight-bar {
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px inset rgba(0, 0, 0, 0.1);
-  height: 0.8vh;
-  border-radius: 5%;
+  background: rgba(255, 255, 255, 0.08);
+  height: 4px;
+  border: none;
+  border-radius: 4px;
   overflow: hidden;
 }
 
+// --- Transitions ---
 .transition-fade-enter {
   opacity: 0;
+  transform: scale(0.97);
 }
 
 .transition-fade-enter-active {
   opacity: 1;
-  transition: opacity 200ms;
+  transform: scale(1);
+  transition: opacity 250ms ease, transform 250ms ease;
 }
 
 .transition-fade-exit {
   opacity: 1;
+  transform: scale(1);
 }
 
 .transition-fade-exit-active {
   opacity: 0;
-  transition: opacity 200ms;
+  transform: scale(0.97);
+  transition: opacity 200ms ease, transform 200ms ease;
 }
 
 .transition-slide-up-enter {
-  transform: translateY(200px)
+  transform: translateY(200px);
+  opacity: 0;
 }
 
 .transition-slide-up-enter-active {
   transform: translateY(0px);
-  transition: all 200ms;
+  opacity: 1;
+  transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .transition-slide-up-exit {
   transform: translateY(0px);
+  opacity: 1;
 }
 
 .transition-slide-up-exit-active {
   transform: translateY(200px);
-  transition: all 200ms;
+  opacity: 0;
+  transition: all 250ms cubic-bezier(0.7, 0, 0.84, 0);
 }
