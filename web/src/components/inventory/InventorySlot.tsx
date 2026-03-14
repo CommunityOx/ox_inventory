@@ -49,7 +49,7 @@ const InventorySlot: React.ForwardRefRenderFunction<HTMLDivElement, SlotProps> =
                 name: item.name,
                 slot: item.slot,
               },
-              image: item?.name && `url(${getItemUrl(item) || 'none'}`,
+              image: item?.name ? `url(${getItemUrl(item)})` : 'none',
             }
           : null,
       canDrag,
@@ -131,7 +131,7 @@ const InventorySlot: React.ForwardRefRenderFunction<HTMLDivElement, SlotProps> =
             ? 'brightness(80%) grayscale(100%)'
             : undefined,
         opacity: isDragging ? 0.4 : 1.0,
-        backgroundImage: `url(${item?.name ? getItemUrl(item as SlotWithItem) : 'none'}`,
+        backgroundImage: item?.name ? `url(${getItemUrl(item as SlotWithItem)})` : 'none',
         border: isOver ? '1px dashed rgba(255,255,255,0.4)' : '',
       }}
     >

@@ -16,30 +16,32 @@ const Tooltip: React.FC = () => {
     duration: 200,
   });
 
-  const handleMouseMove = ({ clientX, clientY }: MouseEvent | React.MouseEvent<unknown, MouseEvent>) => {
-    refs.setPositionReference({
-      getBoundingClientRect() {
-        return {
-          width: 0,
-          height: 0,
-          x: clientX,
-          y: clientY,
-          left: clientX,
-          top: clientY,
-          right: clientX,
-          bottom: clientY,
-        };
-      },
-    });
-  };
-
   useEffect(() => {
+    if (!hoverData.open) return;
+
+    const handleMouseMove = ({ clientX, clientY }: MouseEvent) => {
+      refs.setPositionReference({
+        getBoundingClientRect() {
+          return {
+            width: 0,
+            height: 0,
+            x: clientX,
+            y: clientY,
+            left: clientX,
+            top: clientY,
+            right: clientX,
+            bottom: clientY,
+          };
+        },
+      });
+    };
+
     window.addEventListener('mousemove', handleMouseMove);
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
     };
-  }, []);
+  }, [hoverData.open, refs]);
 
   return (
     <>
