@@ -69,7 +69,8 @@ if IsDuplicityVersion() then
         validhosts = json.decode(GetConvar('inventory:validhosts', [[
 			{
                 "r2.fivemanage.com": true,
-                "i.fmfile.com": true
+                "i.fmfile.com": true,
+                "r2.qbox.re": true
             }
 		]])),
     }
