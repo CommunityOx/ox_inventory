@@ -82,7 +82,7 @@ function Weapon.Equip(item, data, noWeaponAnim)
 
 	if item.group == `GROUP_PETROLCAN` or item.group == `GROUP_FIREEXTINGUISHER` then
 		item.metadata.ammo = item.metadata.durability
-		SetPedInfiniteAmmo(playerPed, true, data.hash)
+		SetPedInfiniteAmmoClip(playerPed, true)
 	end
 
 	TriggerEvent('ox_inventory:currentWeapon', item)
@@ -100,6 +100,10 @@ function Weapon.Disarm(currentWeapon, noAnim)
 
         TriggerServerEvent('ox_inventory:updateWeapon')
 		SetPedAmmo(cache.ped, currentWeapon.hash, 0)
+
+		if currentWeapon.group == `GROUP_PETROLCAN` or currentWeapon.group == `GROUP_FIREEXTINGUISHER` then
+			SetPedInfiniteAmmoClip(cache.ped, false)
+		end
 
 		if client.weaponanims and not noAnim then
 			if cache.vehicle and vehicleIsCycle(cache.vehicle) then
