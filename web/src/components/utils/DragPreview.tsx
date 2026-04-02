@@ -30,12 +30,12 @@ export const calculatePointerPosition = (monitor: DragLayerMonitor, childRef: Re
     return null;
   }
 
-  if (!childRef.current || !childRef.current.getBoundingClientRect) {
+  if (!childRef.current) {
     return subtract(offset, calculateParentOffset(monitor));
   }
 
-  const bb = childRef.current.getBoundingClientRect();
-  const middle = { x: bb.width / 2, y: bb.height / 2 };
+  const el = childRef.current as HTMLElement;
+  const middle = { x: el.clientWidth / 2, y: el.clientHeight / 2 };
   return subtract(offset, middle);
 };
 
@@ -55,7 +55,7 @@ const DragPreview: React.FC = () => {
           className="item-drag-preview"
           ref={element}
           style={{
-            transform: `translate(${currentOffset.x}px, ${currentOffset.y}px)`,
+            transform: `translate3d(${currentOffset.x}px, ${currentOffset.y}px, 0)`,
             backgroundImage: data.image,
           }}
         />
