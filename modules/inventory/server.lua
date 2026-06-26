@@ -1,6 +1,7 @@
 if not lib then return end
 
 local Inventory = {}
+local Vehicles = lib.load('data.vehicles')
 
 ---@type table<any, OxInventory>
 local Inventories = {}
@@ -75,7 +76,6 @@ function OxInventory:syncSlotsWithClients(slots, syncOwner)
 	end
 end
 
-local Vehicles = lib.load('data.vehicles')
 local RegisteredStashes = {}
 
 for _, stash in pairs(lib.load('data.stashes') or {}) do
@@ -90,8 +90,6 @@ for _, stash in pairs(lib.load('data.stashes') or {}) do
         distance = stash.distance or 10
 	}
 end
-
-local GetVehicleNumberPlateText = GetVehicleNumberPlateText
 
 ---Atempts to lazily load inventory data from the database or create a new player-owned instance for "personal" stashes
 ---@param data table
@@ -2760,5 +2758,75 @@ function Inventory.InspectInventory(playerId, invId)
 end
 
 exports('InspectInventory', Inventory.InspectInventory)
+
+
+---@param source number Player source
+---@param inventoryId string The inventory ID to register
+---@param invType? 'trunk'|'glovebox' Type of vehicle inventory (default: 'trunk')
+---@return string|nil inventoryId The created inventory ID, or nil on failure
+function Inventory.RegisterVehicleInventory(source, inventoryId, vehicleNetId, invType)
+
+	if not inventoryId then
+		return lib.print.error('RegisterVehicleInventory: inventoryId is required')
+	end
+    if not vehicleNetId then
+		return lib.print.error('RegisterVehicleInventory: vehicleNetId is required')
+	end
+
+	local existingInventory = Inventories[inventoryId]	
+	if existingInventory then
+		return inventoryId
+	end
+
+	invType = invType or 'trunk'
+	if invType ~= 'trunk' and invType ~= 'glovebox' then
+		return lib.print.error('RegisterVehicleInventory: invType must be "trunk" or "glovebox"')
+	end
+
+	local entity = NetworkGetEntityFromNetworkId(vehicleNetId)
+	if not entity or entity == 0 then
+		return lib.print.error('RegisterVehicleInventory: invalid vehicle network ID')
+	end
+
+	if not DoesEntityExist(entity) then
+		return lib.print.error('RegisterVehicleInventory: vehicle entity does not exist')
+	end
+
+	local model = GetEntityModel(entity)
+	local storage = Vehicles[invType].models[model]
+	if not storage then
+		if not source then
+			source = NetworkGetEntityOwner(entity)
+		end
+		if not source or source == 0 then
+			return lib.print.error('RegisterVehicleInventory: cannot determine vehicle class without player source')
+		end
+		
+		local _, class = lib.callback.await('ox_inventory:getVehicleData', source, vehicleNetId)
+		storage = Vehicles[invType][class]
+	end
+	
+	if not storage then
+		return lib.print.error(('RegisterVehicleInventory: no storage config found for model %s'):format(model))
+	end
+
+	local dbId
+	if server.getOwnedVehicleId then
+		dbId = server.getOwnedVehicleId(entity)
+	else
+		dbId = plate
+	end
+
+	local inventory = Inventory.Create(inventoryId, plate, invType, storage[1], 0, storage[2], false, nil, nil, dbId)
+	if not inventory then
+		return lib.print.error('RegisterVehicleInventory: failed to create inventory')
+	end
+	inventory.netid = vehicleNetId
+	inventory.entityId = entity
+
+	return inventoryId
+end
+
+exports('RegisterVehicleInventory', Inventory.RegisterVehicleInventory)
 
 return Inventory
